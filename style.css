@@ -52,7 +52,7 @@ body {
   }
   
   #leftP {
-  text-align:justify;
+    text-align:justify;
     width:40%;
     margin:50px;
     padding:10px 15px 30px 15px;
@@ -60,7 +60,7 @@ body {
   }
   
   #rightP {
-     width:40%;
+    width:40%;
     text-align:justify;
     margin:50px;
     padding:10px 15px 30px 15px;
