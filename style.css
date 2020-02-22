@@ -1,11 +1,14 @@
 body {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: black;
+    padding-top: 0rem;
+   
     
   }
   
   header {
     text-align:center;
-    background-color: #EC576B;
+    background-color: #040c0e;
     color: white;
     border-bottom: 5px #FEDC3D solid;
     
@@ -34,9 +37,11 @@ body {
     margin: auto;
     display:block;
     text-align:center;
-    background-color: #FEDC3D;
+    background-color: black;
     width:75%;
      min-width:500px;
+     color: #FFFFFF;
+     border-left: whitesmoke double .05rem;
   }
   
   h2 {
@@ -48,7 +53,7 @@ body {
   }
   
   article {
-    background-color: #FFFFFF;
+    background-color: #6A8A62;
   }
   
   #leftP {
@@ -68,7 +73,7 @@ body {
   }
   
   h3 {
-      color: brown;
+      color: white;
 
     }
 #me{
@@ -87,8 +92,8 @@ body {
       text-decoration: underline;
   }
   footer {
-    text-align:center;
-    background-color: green;
+    text-align:right;
+  
     border-top: 5px #FEDC3D solid;
     color: white;
     height:10%;
@@ -96,7 +101,6 @@ body {
     max-height:50px;
     padding:30px; 
     margin-top:30px;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   }
   #visit li{
       float:left;
@@ -109,23 +113,10 @@ body {
   .year{
     border-right: .1em black solid;
   }
-  #navigate{
-    text-align: left;
-    padding-left:1em;
-    margin-top:.7em;
-    border-bottom: .5em rgb(93, 191, 248) solid;
-    border-top: .8em rgb(93, 191, 248) solid;
-    
-  }
-  #navigate ul li{
-    margin-left:3em;
-    float:left;
-    padding-right:1em;
-    position: relative;
-    top: -3em;
-  }
+  
   #Hobbies{
     text-align: left;
+    padding-bottom: .3rem;
   }
   #back{
     width:40%;
@@ -169,10 +160,78 @@ body {
  }
 .imgs
 {
-  height: 20px;
-  width: 20px;
+  height: 30px;
+  width: 30px;
 }
 #intro
 {
-  font-family: cursive;
+  font-family: Courier New;
 }
+#hello
+{
+  padding-bottom: .3rem;
+}
+.rotateimg20 {
+  -webkit-transform:rotate(-20deg);
+  -moz-transform: rotate(-20deg);
+  -ms-transform: rotate(-20deg);
+  -o-transform: rotate(-20deg);
+  transform: rotate(-20deg);
+}
+
+#social {
+  position: fixed;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+#social a {
+  display: block;
+  text-align: center;
+  padding: 16px;
+  transition: all 0.3s ease;
+  color: white;
+  font-size: 20px;
+}
+
+#social a:hover {
+  background-color: #000;
+}
+
+#facebook {
+  background: #3B5998;
+  color: white;
+}
+
+#instagram {
+  background: black;
+  color: white;
+}
+
+#tumblr {
+  background: black;
+  color: white;
+}
+
+#linkedin {
+  background: #007bb5;
+  color: white;
+}
+
+#twitter {
+  background: black;
+  color: white;
+}
+#github
+{
+  background: #000;
+  color: #FFFFFF;
+}
+#blogger
+{
+  background:black;
+  color:black;
+}
+
