@@ -1,6 +1,7 @@
 # My First Website 
 
-nitinr2510.github.io
+https://nitinr2510.github.io
+
 My first website I created while learning CSS at edX.
 
 ## Readme Update Date
