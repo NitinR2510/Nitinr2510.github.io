@@ -51,7 +51,10 @@ body {
     margin-right:auto;
     padding:30px;
   }
-
+  
+  article {
+    background-color: #6A8A62;
+  }
   
   #leftP {
     text-align:justify;
