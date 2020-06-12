@@ -1,175 +1,164 @@
 <!DOCTYPE html> 
-<!--It's a best practice to always declare DOCTYPE!-->
-<html lang="en-UK">
+<html lang="en">
   <head>
-    <title>Home Page</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="style.css">
+    <title>
+      Home Page
+    </title>
+    <meta charset="UTF-8">
+    <style>
+      body{
+        text-align: center;
+        padding: 0.2rem;
+      }
+          .row 
+            {
+                display: flex;
+            }
+            .column 
+            {
+                flex: 50%;
+                padding: .1rem;
+            }
+            #logo{
+              border-right: 0.2rem red solid;
+            }
+            header{
+              padding: 0.2rem;
+              padding-bottom: 0.4rem;
+              margin-bottom: 0.5rem;
+              border-bottom: 0.3rem black solid;
+              margin-left: 20%;
+              margin-right: 20%;
+            }
+            button{
+              margin-bottom: 0.3rem;
+              border: none;
+              background: transparent;
+            }
+            button:hover{
+              background-color: black;
+              color: white;
+            }
+            #links{
+              margin-top: 5%;
+            }
+            canvas{
+              padding: 0.2rem;
+            }
+    </style>
   </head>
   <body>
     <header>
-      <h1>Nitin Ranjan</h1>
-      <p id="intro">
-        A proponent of the universal narccissist philosophy 
-      </p>
+      This is a github project aimed at building a multi-page website. (Best viewed on desktop)
     </header>
-    <div id="social">
-      <a target="_blank" href="https://www.facebook.com/nitin.ranjan.520">
-      <img class="imgs" id="facebook" src="fb.png" alt="facebook icon" aria-label="facebook link"></a> 
-  
-      <a target="_blank" href= "https://instagram.com/god_of_whims?fbclid=IwAR2Y2yNAy4RGP5dFgl2SkjBLhROlif5uJQiYkE_e14CHt6R_KgeGclwiZJw">
-        <img class="imgs" id="instagram" src="ig.png" alt="instagram icon" aria-label="instagram handle link"></a>
-    
-      <a target="_blank" href="https://github.com/NitinR2510?fbclid=IwAR1TIqsIo-zxMwCb1zBAxHsD4VO0SZ-Dic6U3SLjy2EAZ4cqG8y9RWXTaC4">
-        <img class="imgs" id="github" src="github.png" alt="github icon" aria-label="github link"></a>
-              
-      <a target="_blank" href = "https://www.linkedin.com/in/nitin-ranjan-50b165190/">
-        <img class="imgs" id="linkedin" src="lki.png" alt="linkedin icon" aria-label="linkedin link"></a>
-
-        <a target="_blank" href = "https://twitter.com/AgainNitinr">
-          <img class="imgs" id="twitter" src="twitter.png" alt="twitter icon" aria-label="twitter link"></a> 
-         
-          <a target="_blank" href="https://www.blogger.com/profile/13592561768396169613">
-            <img class="imgs" id="blogger" src="blogger.png" alt="blogger icon" aria-label="blogger link"></a>
+    <canvas id="canvas" width="150" height="150" style="background-color:#fff"></canvas>
+    <div class="row">
+      <div class="column" id="logo">
+        <img src="name.png" alt="It is Nitin Ranjan here">
+        </div>
+        <div class="column" id="links">
+         <button onclick="home()">Brief and social links</button> <br>
+         <button onclick="icrym()">ICRYM Project - link</button><br>
+         <button onclick="html1()">Souvenir Shop Project - website</button> <br>
+         <button onclick= "html2()">A college day Story- Website</button>
+        </div>
     </div>
-    <section id="hello">
-      <h2><marquee>Understanding Reasoning, Reasoning with Understanding... :|)</marquee></h2>
-      <img id= "morning" src="morning.jpg" alt="morning table" class="rotateimg20">
-      <article id="leftP">
-        <h3>About (in short)</h3>
-        <ol id="About">
-            <li><strong>DOB:</strong> 25/10/1999</li>
-            <li><strong>Nationality:</strong>Indian</li>
-            <li><strong>E-mail:</strong>nitin.ranjan2510@gmail.com</li>
-            <li><strong>Occupation:</strong>Student at university</li>
-            <li><strong>Favourite scientist:</strong>Einstein (Hawking deserves a mention too) </li>
-            <li><strong>Favourite Author:</strong>Tolkien</li>
-            <li><strong>Favourite number:</strong> pi(3.14159265359)</li>
-            <li><strong>Favourite Lines:</strong><em>"A flower blossoms for its own joy"</em></li>
-        </ol>
-      </article>
-      <img id="me" src="me.png" alt="me" />
-      <article id="rightP">
-        <h3>Further</h3>
-        <ol id="further">
-            <li><strong>Favourite poem:</strong> All that is gold does not  glitter</li>
-            <li><strong>Wanna contact?</strong>Check e-mail id in footer</li>
-        </ol>
-        <br/>
-        I also exist on <ol>
-            <li>IBM Q Experience(learner)</li>
-            <li>Codepen.io</li>
-            <li>GoodReads</li>
-            <li>Quora</li>
-            <li>Academia.org</li>
-            <li>HackerRank</li>
-            <li>HackerEarth</li>
-            <li>Codechef</li>
-            <li>YourQuote</li>
-            <li>Canva.com</li>
-          </ol>
-        <em>"Dumb people are blissfully ignorant of how dumb they really are...<br>_Patrick Star_"</em>
-      </article>
+    <section id="projects">
+      
     </section>
-    <section id="LearningExperience">
-      <h2>Learning</h2>
-  </header>
-  <div id="Work">
-    <article>
-      <h3>Front-End Developer</h3>
-      <table id="Learning1">
-        <tr>
-          <th>Year</th>
-          <th>Subject Matter</th>
-          <th>Place</th>
-        </tr>
-        <tr>
-          <td class="year">2010</td>
-          <td>HTML4.0 basics</td>
-          <td>Junior School Club</td>
-        </tr>
-        <tr>
-          <td class="year">2018</td>
-          <td> HTML5 basics</td>
-          <td>Udemy and W3C</td>
-        </tr>
-        <tr>
-          <td class="year">2019</td>
-          <td>CSS3</td>
-          <td>edX</td>
-        </tr>
-      </table>
-      <br/>
-    </article>
-    <article>
-      <h3>Programming</h3>
-      <table id="Learning2">
-        <tr>
-          <th>Year</th>
-          <th>Subject Matter</th>
-          <th>Place</th>
-          </tr>
-          <tr>
-            <td class="year">2018</td>
-            <td>Python Basics</td>
-            <td>VIT, Vellore</td>
-          </tr>
-          <tr>
-            <td class="year">2018</td>
-            <td>C and O.O.P(C++)</td>
-            <td>VIT, Vellore</td>
-          </tr>
-          <tr>
-            <td class="year">2019</td>
-            <td>SQL</td>
-            <td>VIT Vellore</td>
-          </tr>
-          <tr>
-            <td class="year">2019</td>
-            <td>PHP</td>
-            <td>W3C</td>
-          </tr>
-        <tr>
-          <td class="year">2020</td>
-          <td>Java</td>
-          <td>VIT</td>
-        </tr>
-      </table>
-     </article>  
-  </section>
-
-  <section >
-      <h2>Hobbies</h2>
-      <p>
-        There are many things that define you and so are there many for me.
-      </p>
-    <article id="Hobbies">
-     <p>
-       <ul>
-         <li>Fascination for poetry,comics and cartoons</li>
-         <li>I love to write poems</li>
-         <li>Story-telling</li>
-         <li>Bathroom-singing</li>
-         <li>On-table singing</li>
-         <li>Listening to music</li>
-         <li>Science-geek</li>
-         <li>History and mythology geek</li>
-         <li>Foodie</li>
-         <li>I live for heroes(Shaktiman generation)</li>
-         <em>And yet a bored panda...</em>
-         </p>
-       </ul>       
-    </article>
-    <img id="Cap" src="avengerscap.jpg" alt="Captain America's triology picture" />
-   
-  </section>  
-
-    <footer>
-      <strong>Connect At</strong> nitin.ranjan2510@gmail.com
-      <br>
-      <br>
-      Visit Soon... :D
-    </footer>
-    <script type="text/javascript" src="https://platform.linkedin.com/badges/js/profile.js" async defer></script>
+    <script>
+      function home(){
+        location.href="home.html"
+      }
+      function icrym(){
+        location.href="icrym.html"
+      }
+      function html2(){
+        location.href="http://justaday.000webhostapp.com/"
+      }
+      function html1(){
+        location.href="https://lockdownsouvenir.000webhostapp.com/"
+      }
+      var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
+            var radius = canvas.height / 2;
+            ctx.translate(radius, radius);
+            radius = radius * 0.90
+            setInterval(drawClock, 1000);
+            
+            function drawClock() {
+              drawFace(ctx, radius);
+              drawNumbers(ctx, radius);
+              drawTime(ctx, radius);
+            }
+            
+            function drawFace(ctx, radius) {
+              var grad;
+              ctx.beginPath();
+              ctx.arc(0, 0, radius, 0, 2*Math.PI);
+              ctx.fillStyle = 'white';
+              ctx.fill();
+              grad = ctx.createRadialGradient(0,0,radius*0.95, 0,0,radius*1.05);
+              grad.addColorStop(0, '#333');
+              grad.addColorStop(0.5, 'white');
+              grad.addColorStop(1, '#333');
+              ctx.strokeStyle = grad;
+              ctx.lineWidth = radius*0.1;
+              ctx.stroke();
+              ctx.beginPath();
+              ctx.arc(0, 0, radius*0.1, 0, 2*Math.PI);
+              ctx.fillStyle = '#333';
+              ctx.fill();
+            }
+            
+            function drawNumbers(ctx, radius) {
+              var ang;
+              var num;
+              ctx.font = radius*0.15 + "px arial";
+              ctx.textBaseline="middle";
+              ctx.textAlign="center";
+              for(num = 1; num < 13; num++){
+                ang = num * Math.PI / 6;
+                ctx.rotate(ang);
+                ctx.translate(0, -radius*0.85);
+                ctx.rotate(-ang);
+                ctx.fillText(num.toString(), 0, 0);
+                ctx.rotate(ang);
+                ctx.translate(0, radius*0.85);
+                ctx.rotate(-ang);
+              }
+            }
+            
+            function drawTime(ctx, radius){
+                var now = new Date();
+                var hour = now.getHours();
+                var minute = now.getMinutes();
+                var second = now.getSeconds();
+                //hour
+                hour=hour%12;
+                hour=(hour*Math.PI/6)+
+                (minute*Math.PI/(6*60))+
+                (second*Math.PI/(360*60));
+                drawHand(ctx, hour, radius*0.5, radius*0.07);
+                //minute
+                minute=(minute*Math.PI/30)+(second*Math.PI/(30*60));
+                drawHand(ctx, minute, radius*0.8, radius*0.07);
+                // second
+                second=(second*Math.PI/30);
+                drawHand(ctx, second, radius*0.9, radius*0.02);
+            }
+            
+            function drawHand(ctx, pos, length, width) {
+                ctx.beginPath();
+                ctx.lineWidth = width;
+                ctx.lineCap = "round";
+                ctx.moveTo(0,0);
+                ctx.rotate(pos);
+                ctx.lineTo(0, -length);
+                ctx.stroke();
+                ctx.rotate(-pos);
+            }
+    </script>
   </body>
 </html>
+    
