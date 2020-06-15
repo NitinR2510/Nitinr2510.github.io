@@ -3,14 +3,13 @@ body {
     background-color:black;  
   }
     header {
-    text-align:center;
-    background-color: #040c0e;
-    color: white;
-    border-bottom: 5px #FEDC3D solid; 
+      text-align: center;
+      background-color: #040c0e;
+      color: white;
+      border-bottom: 5px #FEDC3D solid; 
   }
-  header h1 {
-    
-   font-family: 'Times New Roman', Times, serif;
+  header h1{
+    font-family: 'Times New Roman', Times, serif;
     margin-left:auto;
     margin-right:auto;
     border-bottom: 2px #FFFFFF solid;
