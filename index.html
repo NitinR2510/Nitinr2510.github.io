@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Main Page</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -9,15 +9,21 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   <style>
-       button{
-              margin-bottom: 0.3rem;
-              border: none;
-              background: transparent;
-            }
-            button:hover{
-              background-color: black;
-              color: white;
-            }
+    button{
+      margin-bottom: 0.3rem;
+      border: none;
+      background: transparent;
+  }
+    button:hover{
+      background-color: black;
+      color: white;
+    }
+  #but{
+    margin-top: 10%
+  }
+  #clock{
+    margin-top: 5%;
+  }
   </style>
 </head>
 <body>
@@ -35,12 +41,12 @@
     <div class="col-sm-4">
       <img src="name.png" alt="It's Nitin Ranjan here">
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-4" id="but">
       <button onclick="home()">Brief and social links</button> <br>
       <button onclick="project()">Projects: Big &amp small</button><br>
       <button onclick="poem()">The Poet and the Philosopher</button>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-4" id="clock">
       <canvas id="canvas" width="150" height="150" style="background-color:#fff"></canvas>
     </div>
   </div>
