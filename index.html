@@ -38,10 +38,12 @@
 <body>
 <div class="jumbotron text-center" id="heading">
   <h1>I'm Nitin Ranjan</h1>
-  <h5>I am a CSE Student at the VIT University.</h5>
-  <p>わたしはなまえわニティンです。
-    <br>
-    私は学生です。
+  <h5>I am a CSE student at the VIT University.</h5>
+  <p>
+    わたしはなまえわニティンです。<br>
+    私は学生です。<br>
+    はじめまして。<br>
+    おげんきですか。<br>
   </p> 
 </div>
   
@@ -51,7 +53,8 @@
       <img src="name.png" alt="It's Nitin Ranjan here">
     </div>
     <div class="col-sm-4" id="but">
-      <button onclick="home()">Brief and social links</button><i class="fab fa-staylinked"></i> <br>
+      <button onclick="home()">The First page: Brief</button><i class="fab fa-staylinked"></i> <br>
+      <button onclick="resume()">My Resume</button><i class="fas fa-file"></i><br>
       <button onclick="project()">Projects: Big &amp small</button><i class="fas fa-tasks"></i><br>
       <button onclick="poem()">The Poet and the Philosopher</button><i class="fas fa-pen-nib"></i>
     </div>
@@ -69,6 +72,9 @@
   }
   function project(){
     location.href="project.html"
+  }
+  function resume(){
+    location.href="resume.html"
   }
   
   var canvas = document.getElementById("canvas");
