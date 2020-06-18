@@ -1,162 +1,189 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Main Page</title>
-  <script src="https://kit.fontawesome.com/938b5b2a3b.js" crossorigin="anonymous"></script>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-  <link rel="icon" href="me2.jpg" type="image/gif" sizes="16x16">
-  <style>
-    button{
-      margin-bottom: 0.3rem;
-      border: none;
-      background: transparent;
-      transition-property: font-size;
-      font-size: 1rem;
-  }
-    button:hover{
-      transition-property: font-size;
-      transition-duration: 0.3s;
-      font-size: 1.1rem;
-    }
-  #but{
-    margin-top: 10%
-  }
-  #clock{
-    margin-top: 5%;
-  }
-  #heading{
-    background-color: blue;
-    color: #fff;
-  }
-  </style>
-</head>
-<body>
-<div class="jumbotron text-center" id="heading">
-  <h1>I'm Nitin Ranjan</h1>
-  <h5>I am a CSE student at the VIT University.</h5>
-  <p>
-    はじめまして。<br>
-    わたしはなまえわニティンです。<br>
-    私は学生です。<br>
-    おげんきですか。<br>
-  </p> 
-</div>
-  
-<div class="container">
-  <div class="row">
-    <div class="col-sm-4">
-      <img src="name.png" alt="It's Nitin Ranjan here">
-    </div>
-    <div class="col-sm-4" id="but">
-      <button onclick="home()">The First page: Brief</button><i class="fab fa-staylinked"></i> <br>
-      <button onclick="resume()">My Resume</button><i class="fas fa-file"></i><br>
-      <button onclick="project()">Projects: Big &amp small</button><i class="fas fa-tasks"></i><br>
-      <button onclick="poem()">The Poet and the Philosopher</button><i class="fas fa-pen-nib"></i>
-    </div>
-    <div class="col-sm-4" id="clock">
-      <canvas id="canvas" width="150" height="150" style="background-color:#fff"></canvas>
-    </div>
-  </div>
-</div>
-<script>
-  function home(){
-    location.href="home.html"
-  }
-  function poem(){
-          location.href = "https://nitinr2510.github.io/poet_page/"
-  }
-  function project(){
-    location.href="project.html"
-  }
-  function resume(){
-    location.href="resume.html"
-  }
-  
-  var canvas = document.getElementById("canvas");
-        var ctx = canvas.getContext("2d");
-        var radius = canvas.height / 2;
-        ctx.translate(radius, radius);
-        radius = radius * 0.90
-        setInterval(drawClock, 1000);
-        
-        function drawClock() {
-          drawFace(ctx, radius);
-          drawNumbers(ctx, radius);
-          drawTime(ctx, radius);
-        }
-        
-        function drawFace(ctx, radius) {
-          var grad;
-          ctx.beginPath();
-          ctx.arc(0, 0, radius, 0, 2*Math.PI);
-          ctx.fillStyle = 'white';
-          ctx.fill();
-          grad = ctx.createRadialGradient(0,0,radius*0.95, 0,0,radius*1.05);
-          grad.addColorStop(0, '#333');
-          grad.addColorStop(0.5, 'white');
-          grad.addColorStop(1, '#333');
-          ctx.strokeStyle = grad;
-          ctx.lineWidth = radius*0.1;
-          ctx.stroke();
-          ctx.beginPath();
-          ctx.arc(0, 0, radius*0.1, 0, 2*Math.PI);
-          ctx.fillStyle = '#333';
-          ctx.fill();
-        }
-        
-        function drawNumbers(ctx, radius) {
-          var ang;
-          var num;
-          ctx.font = radius*0.15 + "px arial";
-          ctx.textBaseline="middle";
-          ctx.textAlign="center";
-          for(num = 1; num < 13; num++){
-            ang = num * Math.PI / 6;
-            ctx.rotate(ang);
-            ctx.translate(0, -radius*0.85);
-            ctx.rotate(-ang);
-            ctx.fillText(num.toString(), 0, 0);
-            ctx.rotate(ang);
-            ctx.translate(0, radius*0.85);
-            ctx.rotate(-ang);
-          }
-        }
-        
-        function drawTime(ctx, radius){
-            var now = new Date();
-            var hour = now.getHours();
-            var minute = now.getMinutes();
-            var second = now.getSeconds();
-            //hour
-            hour=hour%12;
-            hour=(hour*Math.PI/6)+
-            (minute*Math.PI/(6*60))+
-            (second*Math.PI/(360*60));
-            drawHand(ctx, hour, radius*0.5, radius*0.07);
-            //minute
-            minute=(minute*Math.PI/30)+(second*Math.PI/(30*60));
-            drawHand(ctx, minute, radius*0.8, radius*0.07);
-            // second
-            second=(second*Math.PI/30);
-            drawHand(ctx, second, radius*0.9, radius*0.02);
-        }
-        
-        function drawHand(ctx, pos, length, width) {
-            ctx.beginPath();
-            ctx.lineWidth = width;
-            ctx.lineCap = "round";
-            ctx.moveTo(0,0);
-            ctx.rotate(pos);
-            ctx.lineTo(0, -length);
-            ctx.stroke();
-            ctx.rotate(-pos);
-        } 
-</script>
 
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Nitin Ranjan: Cover Page</title>
+    <link rel="icon" href="me2.jpg" type="image/gif" sizes="16x16">
+    <style>
+        a,a:focus,a:hover {
+            color: #fff;
+            text-decoration: none;
+}
+
+/* Custom default button */
+.btn-default, .btn-default:hover, .btn-default:focus {
+  color: #333;
+  text-shadow: none; /* Prevent inheritence from `body` */
+  background-color: #fff;
+  border: 1px solid #fff;
+}
+
+
+/*
+ * Base structure
+ */
+
+html,body {
+  height: 100%;
+  background-color: #fff;
+}
+body {
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0,0,0,.5);
+}
+footer{
+    color: black;
+}
+
+/* Extra markup and styles for table-esque vertical and horizontal centering */
+.site-wrapper {
+  display: table;
+  width: 100%;
+  height: 600px;
+  background-image: url("background.png");
+  /*height: 100%; */
+  /*min-height: 100%;*/
+}
+.site-wrapper-inner {
+  display: table-cell;
+  vertical-align: top;
+}
+.cover-container {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Padding for spacing */
+.inner {
+  padding: 30px;
+}
+
+
+/*
+ * Header
+ */
+.masthead-brand {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.masthead-nav > li {
+  display: inline-block;
+}
+.masthead-nav > li + li {
+  margin-left: 20px;
+}
+.masthead-nav > li > a {
+  padding-right: 0;
+  padding-left: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff; /* IE8 proofing */
+  color: rgba(255,255,255,.75);
+  border-bottom: 2px solid transparent;
+}
+.masthead-nav > li > a:hover,
+.masthead-nav > li > a:focus {
+  background-color: transparent;
+  border-bottom-color: #a9a9a9;
+  border-bottom-color: rgba(255,255,255,.25);
+}
+.masthead-nav > .active > a,
+.masthead-nav > .active > a:hover,
+.masthead-nav > .active > a:focus {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
+@media (min-width: 768px) {
+  .masthead-brand {
+    float: left;
+  }
+  .masthead-nav {
+    float: right;
+  }
+}
+
+
+/*
+ * Cover
+ */
+
+.cover {
+  padding: 0 20px;
+}
+.cover .btn-lg {
+  padding: 10px 20px;
+  font-weight: bold;
+}
+
+/*
+ * Affix and center
+ */
+
+@media (min-width: 768px) {
+  /* Pull out the header and footer */
+  .masthead {
+    position: fixed;
+    top: 0;
+  }
+  /* Start the vertical centering */
+  .site-wrapper-inner {
+    vertical-align: middle;
+  }
+
+}
+
+    </style>
+  </head>
+
+  <body>
+
+    
+    <div class="site-wrapper">
+
+        <div class="site-wrapper-inner">
+  
+          <div class="container">
+  
+            <div class="masthead clearfix">
+              <div class="container inner">
+                <h3 class="masthead-brand">Welcome</h3>
+                <nav>
+                  <ul class="nav masthead-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                     <li><a href="home.html">About</a></li>
+                    <li><a href="resume.html">Resume</a></li>
+                    <li><a href="project.html">Projects</a></li>
+                    <li><a href="httpS://nitinr2510.github.io/poet_page">The Poet & The Philosopher</a></li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+  
+            <div class="inner cover">
+              <h1 class="cover-heading">Nitin Ranjan</h1>
+              <h3>Student, (History + Mythology) Geek &amp; your chalant philospoher</h3>
+            
+
+                <p class="lead">
+                  わたしはなまえわニティンです。<br>
+                  はじめまして。
+                </p>
+            </div>
+  
+          </div>
+  
+        </div>
+  
+      </div>
+      <footer class="mastfoot mt-auto">
+        <div class="inner">
+          <p>For any queries, please contact at nitzhere2510@gmail.com</p>
+        </div>
+      </footer>
+    </div>
+  </body>
 </html>
