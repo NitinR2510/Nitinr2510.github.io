@@ -2,80 +2,102 @@
 <html lang="en">
 <head>
   <title>Main Page</title>
-  <script src="https://kit.fontawesome.com/938b5b2a3b.js" crossorigin="anonymous"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-  <link rel="icon" href="me2.jpg" type="image/gif" sizes="16x16">
-  <style>
-    button{
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<style>
+  @media only screen and (max-height: 700px) {
+    #first, #second {
+        display: none;
+    }
+}
+@media only screen and (max-width: 1024px) {
+    #fadeshow1 {
+        display: none;
+    }
+}
+  .col-sm-4{
+    height: 100vh;
+    text-align: center;
+   
+  }
+  #first{
+    background-image: url("images/calvin-dark.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+ 
+  }
+  #second{
+    background-image: url("images/calvin-white.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+ 
+  }
+  button{
       margin-bottom: 0.3rem;
       border: none;
       background: transparent;
       transition-property: font-size;
-      font-size: 1rem;
-      color: #fff;
+      font-size: 100%;
   }
     button:hover{
       transition-property: font-size;
       transition-duration: 0.3s;
-      font-size: 1.1rem;
+      font-size: 150%;
     }
-  #but{
-    margin-top: 10%
-  }
-
-  #heading{
-    color: #fff;
-    background-image: url("background.png");
-    border-bottom: #fff 0.3rem double;    
-  }
-  body{
-    background-image: url("background.png");
-    background-repeat: no-repeat;
-    height: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-  #buttons{
-    color: white;
-  }
-  </style>
+    #heading{
+      background-color: #373f51;
+      padding: 0.5rem;
+      color: #fff;
+          }
+    h1{
+      font-family: "Times New Roman", Helvetica, Arial, Serif;
+    }
+    #butt{
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);      
+    }
+    footer{
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: #000;
+      color: white;
+      text-align: center;
+    }
+</style>
 </head>
 <body>
-<div class="jumbotron text-center" id="heading">
-  <h1>I'm Nitin Ranjan</h1>
-  <h5>Student, (History + Mythology) Geek & your chalant philosopher</h5>
-  <p>
-    こんにちは。<br>
-    わたしはなまえわニティンです。<br>
-    はじめまして。
-  </p> 
-</div>
-<div class="container">
+<div class="container-fluid">
   <div class="row">
-    <div class="col-sm-4" id="buttons">
-      <img src="me2.jpg" alt="a cartoon representation" width="40%" style="border-radius:7rem;" title="That's a cartoon me!" />
-      <h4>Hello There.</h4>
-      <nav style="border: 0.3rem solid white;">
+    <div class="col-sm-4" style="background-color:black;" id="first"></div>
+    <div class="col-sm-4" style="background-color:lavenderblush;" id="imp">
+      <div id="heading">
+      <h1>I'm Nitin Ranjan</h1>
+      <h5>Student, (History + Mythology) Geek & your chalant philosopher</h5>
+      <p>
+        こんにちは。<br>
+        わたしはなまえわニティンです。<br>
+        はじめまして。
+      </p>
+    </div>
+    <div id="butt">
       <button onclick="home()">About Me</button><i class="fab fa-staylinked"></i> <br>
       <button onclick="resume()">My Resume</button><i class="fas fa-file"></i><br>
       <button onclick="project()">Projects: Big &amp small</button><i class="fas fa-tasks"></i><br>
       <button onclick="poem()">The Poet and the Philosopher</button><i class="fas fa-pen-nib"></i>
-      </nav>
       </div>
-      <div class="col-sm-4">
-
-      </div>
-      <div class="col-sm-4" style="text-align: center;" >
-        <img src="gandalf.png" alt="decorative image" title="oh that's Gandalf." style="width: 300px; height: 300px;"/>
-      </div>
+    </div>
+    <div class="col-sm-4" style="background-color:lavender;" id="second"></div>
   </div>
 </div>
+<footer>
+  Made by Nitin Ranjan on a three-column bootstrap theme
+</footer>
 <script>
   function home(){
     location.href="home.html"
@@ -90,6 +112,8 @@
     location.href="resume.html"
   }
 </script>
-
+<script src="https://kit.fontawesome.com/938b5b2a3b.js" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>
