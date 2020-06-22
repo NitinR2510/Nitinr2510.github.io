@@ -6,9 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <style>
+  .mobile{
+    display: none;
+  }
   @media only screen and (max-height: 700px) {
     #first, #second {
         display: none;
+    }
+    .mobile{
+      display: block;
     }
 }
 @media only screen and (max-width: 1000px) {
@@ -16,6 +22,7 @@
         display: none;
     }
 }
+
   .col-sm-4{
     height: 100vh;
     text-align: center;
@@ -49,16 +56,11 @@
     }
     #heading{
       background-color: #373f51;
-      padding: 0.5rem;
+      padding: 1.5rem;
       color: #fff;
           }
     h1{
       font-family: "Times New Roman", Helvetica, Arial, Serif;
-    }
-    #butt{
-      position: relative;
-      top: 50%;
-      transform: translateY(-50%);      
     }
     footer{
       position: fixed;
@@ -74,7 +76,8 @@
 <body>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-sm-4" style="background-color:black;" id="first"></div>
+    <div class="col-sm-4" style="background-color:black;" id="first">
+    </div>
     <div class="col-sm-4" style="background-color:lavenderblush;" id="imp">
       <div id="heading">
       <h1>I'm Nitin Ranjan</h1>
@@ -84,7 +87,14 @@
         わたしはなまえわニティンです。<br>
         はじめまして。
       </p>
+      <div class="mobile">
+        <p>
+          You are watching this on a small screen. While that does not in any way cause any accessibilty issues to any person,
+          Do try to switch to a larger screen to enjoy the aesthetics in a more refined manner.
+        </p>
+      </div>
     </div>
+    <br><br><br>
     <div id="butt">
       <button onclick="home()">About Me</button><i class="fab fa-staylinked"></i> <br>
       <button onclick="resume()">My Resume</button><i class="fas fa-file"></i><br>
