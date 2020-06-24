@@ -1,62 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <title>Miscellaneous</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="icon" type="image/png" href="images/me2.jpg">
 <style>
-body, html {
-  height: 100%;
-  margin: 0;
-}
-
-.bgimg {
-  background-image: url('images/background.png');
-  height: 100%;
-  background-position: center;
-  background-size: cover;
-  position: relative;
-  color: white;
-  font-family: "Courier New", Courier, monospace;
-  font-size: 25px;
-}
-
-.topleft {
-  position: absolute;
-  top: 0;
-  left: 16px;
-}
-
-.bottomleft {
-  position: absolute;
-  bottom: 0;
-  left: 16px;
-}
-
-.middle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-hr {
-  margin: auto;
-  width: 40%;
-}
+  .col-sm-4{
+    height: 100vh;
+    text-align: center;
+   
+  }
+  #first{
+    background-image: url("images/misc1.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+ 
+  }
+  #second{
+    background-image: url("images/calvin-white.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+ 
+  }
+  button{
+      margin-bottom: 0.3rem;
+      border: none;
+      background: transparent;
+      transition-property: font-size;
+      font-size: 100%;
+  }
+    button:hover{
+      transition-property: font-size;
+      transition-duration: 0.3s;
+      font-size: 150%;
+    }
+    #heading, #footing{
+      background-color: #373f51;
+      padding: 1.5rem;
+      color: #fff;
+          }
+    h1{
+      font-family: "Times New Roman", Helvetica, Arial, Serif;
+    }
+    footer{
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: #000;
+      padding: 0.4rem;
+      color: white;
+      text-align: center;
+    }
 </style>
+</head>
 <body>
-
-<div class="bgimg">
-  <div class="topleft">
-    <p>Nitin Ranjan</p>
-  </div>
-  <div class="middle">
-    <h1>COMING SOON</h1>
-    <hr>
-    <p>As soon as I make it</p>
-  </div>
-  <div class="bottomleft">
-    <p>This page was borrowed from W3C</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-4" style="background-color:lavenderblush;" id="imp">
+      <div id="heading">
+      <h1>I'm Nitin Ranjan</h1>
+      <i class="fas fa-laptop-code" aria-label="computer-code" alt="I am a programmer image"></i>
+      <i class="fas fa-music" aria-label="music" alt="I love music"></i>
+      <i class="fas fa-book-reader" aria-label="book" alt="Image of book: I love to read"></i>
+      <i class="fas fa-cookie-bite" aria-label="food" alt="Image of cookie: I am a foodie"></i>
+      <i class="fas fa-heart" aria-label="I am in love with life" alt="love symbol: loving life"></i>
+<br><br>
+      <p>
+    This page is under construction. Thought that's akward coming here clicking your way through and I apologise for the same,
+    but I cannot help.
+      </p>
+    </div>
+    <br><br><br>
+      <button type="button" class="btn btn-primary btn-lg" onclick="home()"> Proceed to About Me Page <i class="fab fa-staylinked"></i> </button>
+      <br><br><br>
+      <blockquote>
+        "Weird man, Weird Lines"
+      </blockquote>
+      <cite>Nitin Ranjan</cite>
+      <div id="footing">
+        <h1>Note</h1>
+        <i class="fas fa-laptop-code" aria-label="computer-code" alt="I am a programmer image"></i>
+        <i class="fas fa-music" aria-label="music" alt="I love music"></i>
+        <i class="fas fa-book-reader" aria-label="book" alt="Image of book: I love to read"></i>
+        <i class="fas fa-cookie-bite" aria-label="food" alt="Image of cookie: I am a foodie"></i>
+        <i class="fas fa-heart" aria-label="I am in love with life" alt="love symbol: loving life"></i>
+  <br><br>
+        <p>
+        I'll try to put this page on work as soon as I can. Thankyou for your cooperation.
+      </div>
+    </div>
+    <div class="col-sm-4" style="background-color:black;" id="first">
+    </div>
+    <div class="col-sm-4" style="background-color:lavender;" id="second"></div>
   </div>
 </div>
-
+<footer>
+  <i class="far fa-copyright"></i> Nitin Ranjan
+</footer>
+<script>
+  function home(){
+    location.href="home.html"
+  }
+</script>
+<script src="https://kit.fontawesome.com/938b5b2a3b.js" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>
