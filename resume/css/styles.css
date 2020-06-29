@@ -110,7 +110,7 @@ b.max-bold{ font-weight: 700; }
 3. HEADER
 --------------------------------- */
 
-header{ position: absolute; top: 30px; left: 0; right: 0; z-index: 100; }
+header{ position: absolute; top: 30px; left: 0; right: 0; z-index: 100;background-color: #000; }
 
 header .heading-wrapper{ border-radius: 5px; padding: 30px 40px 20px; background: #FFAD01; color: #fff; }
 
@@ -135,7 +135,7 @@ header .downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: trans
 	z-index: 1;background-image: url(../../images/slider-1-1920x1080.jpg); }
 
 .intro-section:before{ content:''; z-index: -1; position: absolute; top: 0; bottom: 0; left: 0; 
-	right: 0; background: rgba(0,0,0, .2); }
+	right: 0; background: rgb(0,0,0); }
 	
 .intro-section:after{ content: ''; position: absolute; bottom: 0; left: 0; right: 0;
 	height: 150px; z-index: -1; background: #fff; }
