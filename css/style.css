@@ -39,7 +39,7 @@ display: table;
 }
 
 /* Add a background color on hover */
-.btn-group button:hover {
+.btn-group button:hover, .btn-group button:focus {
 background-color: #3e8e41;
 }
 h3{
