@@ -7,19 +7,13 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <link rel="icon" type="image/png" href="images/me2.jpg">
 <style>
-  .mobile{
-    display: none;
-  }
   @media only screen and (max-height: 600px) {
     #first, #second {
         display: none;
     }
-    .mobile{
-      display: block;
-    }
 }
 @media only screen and (max-width: 900px) {
-    #first, #second {
+    #first, #second{
         display: none;
     }
 }
@@ -30,14 +24,14 @@
    
   }
   #first{
-    background-image: url("images/calvin-dark.jpg");
+    background-image: url("images/image2.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
  
   }
   #second{
-    background-image: url("images/calvin-white.jpg");
+    background-image: url("images/image1.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -80,41 +74,29 @@
   <div class="row">
     <div class="col-sm-4" style="background-color:black;" id="first">
     </div>
-    <div class="col-sm-4" style="background-color:lavenderblush;" id="imp">
+    <div class="col-sm-4" style="background-image: url('images/IMG-20191201-WA0057.jpg'); background-repeat: no-repeat; background-size: cover;"; id="imp">
       <div id="heading">
       <h1>I'm Nitin Ranjan</h1>
-      <h5>Student, (History + Mythology) Geek & Philosopher</h5>
+      <p>
+        こんにちは。<br>
+        <h5>"Weird man, Weird Lines"</h5>
+      </p>
       <i class="fas fa-laptop-code" aria-label="computer-code" alt="I am a programmer image"></i>
       <i class="fas fa-music" aria-label="music" alt="I love music"></i>
       <i class="fas fa-book-reader" aria-label="book" alt="Image of book: I love to read"></i>
       <i class="fas fa-cookie-bite" aria-label="food" alt="Image of cookie: I am a foodie"></i>
       <i class="fas fa-heart" aria-label="I am in love with life" alt="love symbol: loving life"></i>
 <br><br>
-      <p>
-        こんにちは。<br>
-        わたしはなまえわニティンです。<br>
-        はじめまして。
-      </p>
-      <div class="mobile">
-        <p>
-          You are watching this on a small screen. While that does not in any way cause any accessibilty issues to any person,
-          Do try to switch to a larger screen to enjoy the aesthetics in a more refined manner.
-        </p>
-      </div>
     </div>
-    <br><br><br>
-      <button type="button" class="btn btn-primary btn-lg" onclick="home()"> Proceed to About Me Page <i class="fab fa-staylinked"></i> </button>
-      <br><br><br>
-      <blockquote>
-        "Weird man, Weird Lines"
-      </blockquote>
-      <cite>Nitin Ranjan</cite>
+    <br><br><br><br><br>
+      <button type="button" class="btn btn-primary btn-lg" onclick="home()"> Proceed to the Website <i class="fab fa-staylinked"></i> </button>
+      <br>
     </div>
     <div class="col-sm-4" style="background-color:lavender;" id="second"></div>
   </div>
 </div>
 <footer>
-  Made by Nitin Ranjan. <br> I claim no copyright to the images.
+  Last Updated Feb 2021 <br>
 </footer>
 <script>
   function home(){
