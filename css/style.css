@@ -4,6 +4,9 @@
 .mobile{
     display: none;
 }
+.btn-mob{
+  display: none;
+}
 @media only screen and (min-height: 700px) {
     footer {
         position: fixed;
@@ -24,6 +27,13 @@
         display: block;
         text-align: center;
     }
+    .mob-btn{
+      display: none;
+    }
+    .btn-mob{
+      display: block;
+      text-align: center;
+    }
 }
 
 .list-unstyled a, a:hover{
@@ -32,6 +42,11 @@
   }
   .social a{
       color: #000;
+  }
+  .btn-mob{
+    background-color: transparent;
+    border: none;
+    padding: 10px 24px;
   }
   .btn-group button {
 background-color: transparent;
@@ -42,16 +57,15 @@ float: left; /* Float the buttons side by side */
 .btn-group button:not(:last-child) {
 border-right: none; /* Prevent double borders */
 }
-
 /* Clear floats (clearfix hack) */
-.btn-group:after {
+.btn-group:after{
 content: "";
 clear: both;
 display: table;
 }
 
 /* Add a background color on hover */
-.btn-group button:hover, .btn-group button:focus {
+.btn-group button:hover, .btn-group button:focus, .btn-mob:hover, .btn-mob:focus {
 background-color: #3e8e41;
 }
 h3{
