@@ -15,7 +15,12 @@ body {
 body {
     display: grid;
     place-items: center;
-    background: #AB47BC
+    background: #d6afdd
+}
+
+img{
+    width: 30%;
+    height: 30%;
 }
 
 .card {
@@ -38,7 +43,7 @@ box-shadow:  20px 20px 60px #913ca0,
     border: none;
     margin-right: 10px;
     border-radius: 50%;
-background: linear-gradient(145deg, #9a40a9, #b74cc9);
+background: linear-gradient(145deg, #d900ff, #b74cc9);
 box-shadow: inset 20px 20px 60px #913ca0, 
              inset -20px -20px 60px #c552d8;
 }
