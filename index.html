@@ -25,6 +25,7 @@
 
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior: smooth; }
+  body.nav-open { overflow: hidden; }
 
   body {
     font-family: 'EB Garamond', serif;
@@ -41,7 +42,7 @@
   }
 
   nav {
-    position:fixed; top:0; left:0; right:0; z-index:500;
+    position:fixed; top:0; left:0; right:0; z-index:700;
     padding:1.1rem 3rem;
     display:flex; justify-content:space-between; align-items:center;
     background:linear-gradient(to bottom, rgba(25,23,20,0.97) 0%, transparent 100%);
@@ -394,7 +395,7 @@
   /* ══ HAMBURGER ══ */
   .nav-hamburger {
     display:none; flex-direction:column; justify-content:center; gap:5px;
-    width:36px; height:36px; cursor:pointer;
+    width:44px; height:44px; cursor:pointer;
     background:transparent; border:none; padding:4px; z-index:600;
   }
   .nav-hamburger span {
@@ -413,29 +414,35 @@
     .nav-hamburger { display:flex; }
     .nav-links {
       position:fixed; top:0; right:0; bottom:0;
-      width:72vw; max-width:280px;
+      width:min(82vw, 320px);
       background:rgba(22,20,16,0.98); backdrop-filter:blur(12px);
       flex-direction:column; gap:0;
-      padding:5rem 2rem 2rem;
+      padding:5.5rem 1.4rem 2rem;
       border-left:1px solid rgba(201,168,76,0.12);
       transform:translateX(105%);
       transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);
-      z-index:550;
+      z-index:720;
+      overflow-y:auto;
+      pointer-events:none;
     }
-    .nav-links.open { transform:translateX(0); }
+    .nav-links.open { transform:translateX(0); pointer-events:auto; }
     .nav-links li { border-bottom:1px solid rgba(201,168,76,0.08); }
-    .nav-links a { display:block; padding:1rem 0; font-size:0.8rem; letter-spacing:0.25em; }
+    .nav-links a { display:block; padding:1rem 0; font-size:0.95rem; letter-spacing:0.12em; }
     .nav-overlay {
       display:none; position:fixed; inset:0;
-      background:rgba(0,0,0,0.5); z-index:540;
+      background:rgba(0,0,0,0.5); z-index:680;
     }
     .nav-overlay.open { display:block; }
 
+    .hero { min-height:100svh; }
     .hero-arch { display:none; }
-    .hero-content { padding:6rem 1.5rem 2rem; }
-    .hero-eyebrow { font-size:0.58rem; letter-spacing:0.28em; }
+    .hero-content { padding:6.5rem 1.5rem 2.5rem; }
+    .hero-eyebrow { font-size:0.78rem; letter-spacing:0.12em; line-height:1.5; }
+    .hero-subtitle { font-size:1.05rem; line-height:1.6; }
+    .hero-org { font-size:0.82rem; letter-spacing:0.1em; line-height:1.5; }
+    .hero-tagline { font-size:1rem; line-height:1.6; margin-bottom:2.2rem; }
     .hero-btns { flex-direction:column; align-items:center; }
-    .btn { width:100%; max-width:280px; justify-content:center; }
+    .btn { width:100%; max-width:300px; justify-content:center; font-size:0.82rem; letter-spacing:0.12em; }
 
     section { padding:4rem 0; }
     .container { padding:0 1.4rem; }
@@ -445,19 +452,28 @@
     .about-grid { grid-template-columns:1fr; gap:2.5rem; }
     .avatar-col { flex-direction:column; align-items:center; }
     .avatar { width:140px; height:140px; font-size:2rem; }
+    .fact { font-size:1rem; line-height:1.6; }
+    .about-body p { font-size:1rem; line-height:1.85; }
+    blockquote { padding:1.2rem 1.2rem 1.2rem 1.4rem; font-size:0.98rem; line-height:1.75; }
 
     .timeline { padding-left:1.2rem; }
     .tl-item { padding:0 0 2.5rem 1.8rem; }
     .tl-role { font-size:1rem; }
-    .tl-tag { font-size:0.58rem; }
+    .tl-period { font-size:0.78rem; letter-spacing:0.12em; }
+    .tl-org, .tl-bullets li { font-size:1rem; }
+    .tl-tag { font-size:0.75rem; letter-spacing:0.08em; line-height:1.5; }
 
-    .skill-pill { font-size:0.68rem; padding:0.45rem 0.9rem; }
+    .skill-cat-title { font-size:0.8rem; letter-spacing:0.14em; }
+    .skill-pill { font-size:0.8rem; letter-spacing:0.05em; padding:0.5rem 0.9rem; }
 
     .proj-grid { grid-template-columns:1fr; }
     .blog-grid { grid-template-columns:1fr; }
+    .proj-badge, .blog-tag, .proj-link { font-size:0.76rem; letter-spacing:0.1em; }
+    .proj-desc, .res-abstract, .blog-excerpt { font-size:0.98rem; line-height:1.75; }
 
     .contact-intro { font-size:1rem; }
-    .c-link { min-width:140px; padding:0.85rem 1.2rem; font-size:0.68rem; }
+    .c-link { min-width:140px; padding:0.95rem 1.2rem; font-size:0.82rem; letter-spacing:0.08em; }
+    .closing { font-size:0.82rem; letter-spacing:0.14em; }
 
     #music-btn { bottom:1.4rem; right:1.2rem; width:42px; height:42px; }
     #music-label { display:none; }
@@ -466,6 +482,8 @@
 
   @media (max-width: 420px) {
     .hero-name { font-size:2.4rem; }
+    .hero-eyebrow { font-size:0.72rem; }
+    .hero-org { font-size:0.76rem; }
     .contact-grid { flex-direction:column; align-items:center; }
     .c-link { width:100%; max-width:300px; }
   }
@@ -475,8 +493,8 @@
 
 <div class="nav-overlay" id="nav-overlay"></div>
 <nav>
-  <div class="nav-brand">N · R</div>
-  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+  <div class="nav-brand">N &middot; R</div>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
     <span></span><span></span><span></span>
   </button>
   <ul class="nav-links" id="nav-links">
@@ -1065,23 +1083,39 @@
   document.addEventListener('keydown', autoStart);
 })();
 
-// ── Hamburger nav ──
+// Mobile nav
 const hamburger = document.getElementById('nav-hamburger');
 const navLinks  = document.getElementById('nav-links');
 const overlay   = document.getElementById('nav-overlay');
 
+function openNav() {
+  hamburger.classList.add('open');
+  hamburger.setAttribute('aria-expanded', 'true');
+  navLinks.classList.add('open');
+  overlay.classList.add('open');
+  document.body.classList.add('nav-open');
+}
+
 function closeNav() {
   hamburger.classList.remove('open');
+  hamburger.setAttribute('aria-expanded', 'false');
   navLinks.classList.remove('open');
   overlay.classList.remove('open');
+  document.body.classList.remove('nav-open');
 }
 
 hamburger.addEventListener('click', () => {
   const isOpen = navLinks.classList.contains('open');
-  isOpen ? closeNav() : (hamburger.classList.add('open'), navLinks.classList.add('open'), overlay.classList.add('open'));
+  isOpen ? closeNav() : openNav();
 });
 overlay.addEventListener('click', closeNav);
 document.querySelectorAll('.nav-close').forEach(a => a.addEventListener('click', closeNav));
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && navLinks.classList.contains('open')) closeNav();
+});
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 768) closeNav();
+});
 
 // ── Floating runes ──
 const RUNES = ['ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛊ','ᛏ','ᛒ','ᛖ','ᛗ','ᛚ','ᛜ','ᛞ','ᛟ'];
