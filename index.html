@@ -6,7 +6,580 @@
 <title>nitin_os</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<style>
+  :root{
+    --bg-desktop-1: #14161a;
+    --bg-desktop-2: #1b1e24;
+    --surface-window: #1e2126;
+    --surface-titlebar: #23262c;
+    --border-subtle: rgba(255,255,255,0.08);
+    --border-mid: rgba(255,255,255,0.14);
+    --text-primary: #e8e6e1;
+    --text-muted: #8b9099;
+    --text-faint: #5a5f68;
+    --accent-amber: #e0a458;
+    --accent-realm: #c1543f;
+    --accent-green: #7dd3a8;
+    --danger: #e0645a;
+    --mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+    --sans: 'Inter', -apple-system, sans-serif;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0; padding:0; height:100%;
+    background: var(--bg-desktop-1);
+    font-family: var(--sans);
+    color: var(--text-primary);
+    overflow:hidden;
+  }
+
+  /* ---------- desktop container (control everything from here via CSS) ---------- */
+  .os-frame{
+    position:relative;
+    width:100%;
+    height:100vh;
+    background:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0) 0 0/28px 28px,
+      radial-gradient(ellipse at 30% 20%, var(--bg-desktop-2), var(--bg-desktop-1) 60%);
+    opacity:0;
+    animation: boot-in 0.6s ease-out forwards;
+  }
+
+  @keyframes boot-in{
+    from{ opacity:0; }
+    to{ opacity:1; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .os-frame{ animation:none; opacity:1; }
+  }
+
+  /* ---------- top status bar ---------- */
+  .topbar{
+    position:absolute; top:0; left:0; right:0;
+    height:36px;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 18px;
+    font-family: var(--mono);
+    font-size:12px;
+    letter-spacing:0.02em;
+    color: var(--text-muted);
+    background: rgba(20,22,26,0.55);
+    backdrop-filter: blur(6px);
+    border-bottom:1px solid var(--border-subtle);
+    z-index:10;
+  }
+
+  .topbar-left{
+    display:flex; align-items:center; gap:8px;
+    color: var(--text-primary);
+    font-weight:600;
+  }
+  .topbar-left .mark{ color: var(--accent-amber); }
+
+  .topbar-center{
+    display:flex; align-items:center; gap:6px;
+    font-variant-numeric: tabular-nums;
+  }
+  .topbar-center .dot{
+    width:6px; height:6px; border-radius:50%;
+    background: var(--accent-green);
+    display:inline-block;
+    flex-shrink:0;
+  }
+
+  .topbar-right{
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- desktop surface + icons ---------- */
+  .desktop-surface{
+    position:absolute;
+    top:36px; left:0; right:0; bottom:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:64px;
+  }
+
+  .app-icon{
+    background:none;
+    border:none;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+    padding:10px;
+    border-radius:10px;
+    color: var(--text-primary);
+    font-family: var(--mono);
+    font-size:12.5px;
+    letter-spacing:0.01em;
+    transition: transform 0.15s ease;
+  }
+  .app-icon:hover{ transform: translateY(-2px); }
+  .app-icon:focus-visible{
+    outline:2px solid var(--accent-amber);
+    outline-offset:4px;
+  }
+  .app-icon .icon-box{
+    width:58px; height:58px;
+    border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    background: linear-gradient(160deg, #22252b, #1a1c21);
+    border:1px solid var(--border-subtle);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .app-icon:hover .icon-box{
+    border-color: var(--border-mid);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.45);
+  }
+  .app-icon .label{ color: var(--text-muted); }
+  .app-icon:hover .label{ color: var(--text-primary); }
+
+  .icon-box svg{ width:26px; height:26px; }
+
+  /* ---------- contribution heatmap strip (merges into background) ---------- */
+  .forest-strip{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:98px;
+    display:grid;
+    grid-template-rows: repeat(7, 1fr);
+    grid-auto-flow:column;
+    grid-auto-columns: 11px;
+    gap:3px;
+    padding:16px 22px;
+    z-index:2;
+    pointer-events:none;
+  }
+  .cell{
+    width:11px; height:11px;
+    border-radius:2px;
+    pointer-events:auto;
+  }
+  .cell.empty{ visibility:hidden; }
+
+  .forest-strip{ padding-right:64px; }
+
+  /* ---------- radio tray widget ---------- */
+  .radio-tray{
+    position:absolute;
+    right:22px; bottom:16px;
+    z-index:5;
+  }
+  .radio-btn{
+    width:34px; height:34px;
+    border-radius:50%;
+    background: linear-gradient(160deg, #22252b, #1a1c21);
+    border:1px solid var(--border-subtle);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    color: var(--text-muted);
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .radio-btn:hover{ border-color: var(--border-mid); color: var(--text-primary); }
+  .radio-btn:focus-visible{ outline:2px solid var(--accent-amber); outline-offset:3px; }
+  .radio-btn.playing{ color: var(--accent-amber); border-color: rgba(224,164,88,0.4); }
+  .radio-btn svg{ width:16px; height:16px; }
+
+  .radio-btn.playing .wave{ animation: wave-pulse 1.6s ease-in-out infinite; }
+  .radio-btn.playing .wave.w2{ animation-delay: 0.2s; }
+  .radio-btn.playing .wave.w3{ animation-delay: 0.4s; }
+  @keyframes wave-pulse{
+    0%,100%{ opacity:0.4; }
+    50%{ opacity:1; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .radio-btn.playing .wave{ animation:none; opacity:1; }
+  }
+
+  .radio-popover{
+    position:absolute;
+    bottom:44px; right:0;
+    width:190px;
+    background: var(--surface-titlebar);
+    border:1px solid var(--border-mid);
+    border-radius:10px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+    padding:12px;
+    font-family: var(--mono);
+    font-size:11.5px;
+    color: var(--text-muted);
+    opacity:0;
+    transform: translateY(4px);
+    pointer-events:none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+  .radio-popover.open{
+    opacity:1;
+    transform: translateY(0);
+    pointer-events:auto;
+  }
+  .radio-popover .station-name{
+    color: var(--text-primary);
+    font-size:12.5px;
+    margin-bottom:2px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .radio-popover .station-sub{
+    color: var(--text-faint);
+    font-size:10.5px;
+    margin-bottom:10px;
+  }
+  .radio-popover .controls{
+    display:flex;
+    gap:6px;
+  }
+  .radio-popover button{
+    flex:1;
+    background: rgba(255,255,255,0.04);
+    border:1px solid var(--border-subtle);
+    border-radius:6px;
+    color: var(--text-primary);
+    font-family: var(--mono);
+    font-size:11px;
+    padding:6px 0;
+    cursor:pointer;
+    transition: background 0.15s ease;
+  }
+  .radio-popover button:hover{ background: rgba(255,255,255,0.08); }
+  .radio-popover button:focus-visible{ outline:2px solid var(--accent-amber); outline-offset:2px; }
+
+  /* ---------- info dialog toggle (edge checkbox) ---------- */
+  .edge-toggle{
+    position:absolute;
+    left:0; top:56px;
+    z-index:15;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 10px 6px 8px;
+    background: rgba(20,22,26,0.55);
+    backdrop-filter: blur(6px);
+    border:1px solid var(--border-subtle);
+    border-left:none;
+    border-radius:0 8px 8px 0;
+  }
+  .edge-toggle input[type="checkbox"]{
+    width:13px; height:13px;
+    margin:0;
+    accent-color: var(--accent-amber);
+    cursor:pointer;
+  }
+  .edge-toggle label{
+    font-family: var(--mono);
+    font-size:11px;
+    color: var(--text-muted);
+    cursor:pointer;
+    user-select:none;
+  }
+
+  .info-dialog{
+    position:absolute;
+    left:22px; top:100px;
+    width:250px;
+    background: var(--surface-window);
+    border:1px solid var(--border-mid);
+    border-radius:10px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    overflow:hidden;
+    opacity:0;
+    transform: translateX(-8px);
+    pointer-events:none;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index:14;
+  }
+  .info-dialog.open{
+    opacity:1;
+    transform: translateX(0);
+    pointer-events:auto;
+  }
+  .info-dialog .titlebar{
+    height:32px;
+    background: var(--surface-titlebar);
+    border-bottom:1px solid var(--border-subtle);
+    display:flex; align-items:center; padding:0 10px;
+    font-size:11px;
+  }
+  .info-dialog .titlebar .titletext{ margin-left:8px; }
+  .info-dialog .dialog-body{
+    padding:16px;
+    font-family: var(--mono);
+    font-size:12px;
+  }
+  .info-dialog .copyright{
+    color: var(--text-faint);
+    margin-bottom:16px;
+  }
+  .info-dialog .prompt{
+    color: var(--text-muted);
+    margin-bottom:10px;
+  }
+  .info-dialog .profile-row{
+    display:block;
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    border-top:1px solid var(--border-subtle);
+    padding:10px 0;
+    cursor:pointer;
+    color: var(--text-primary);
+    font-family: var(--mono);
+    font-size:12px;
+  }
+  .info-dialog .profile-row:first-of-type{ border-top:none; }
+  .info-dialog .profile-row .name{ color: var(--accent-amber); }
+  .info-dialog .profile-row .desc{
+    display:block;
+    color: var(--text-faint);
+    font-size:10.5px;
+    margin-top:2px;
+  }
+  .info-dialog .profile-row:hover .name{ color: var(--accent-green); }
+  .info-dialog .profile-row:focus-visible{ outline:2px solid var(--accent-amber); outline-offset:-2px; }
+
+  /* ---------- window ---------- */
+  .window{
+    position:absolute;
+    top:50%; left:50%;
+    width:min(720px, 88vw);
+    height:min(560px, 78vh);
+    transform: translate(-50%,-46%) scale(0.96);
+    background: var(--surface-window);
+    border:1px solid var(--border-mid);
+    border-radius:12px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+    z-index:20;
+  }
+  .window.open{
+    opacity:1;
+    pointer-events:auto;
+    transform: translate(-50%,-50%) scale(1);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .window{ transition:none; }
+  }
+
+  .titlebar{
+    height:38px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    padding:0 12px;
+    background: var(--surface-titlebar);
+    border-bottom:1px solid var(--border-subtle);
+    font-family: var(--mono);
+    font-size:12px;
+    color: var(--text-muted);
+    position:relative;
+  }
+
+  .titlebar .close-btn{
+    width:13px; height:13px;
+    border-radius:50%;
+    border:1px solid var(--border-mid);
+    background: transparent;
+    cursor:pointer;
+    padding:0;
+    position:relative;
+    flex-shrink:0;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .titlebar .close-btn:hover{
+    background: var(--danger);
+    border-color: var(--danger);
+  }
+  .titlebar .close-btn:focus-visible{
+    outline:2px solid var(--accent-amber);
+    outline-offset:3px;
+  }
+  .titlebar .close-btn::before, .titlebar .close-btn::after{
+    content:"";
+    position:absolute;
+    top:50%; left:50%;
+    width:7px; height:1px;
+    background: var(--surface-titlebar);
+    opacity:0;
+    transition: opacity 0.15s ease;
+  }
+  .titlebar .close-btn:hover::before{ opacity:1; transform: translate(-50%,-50%) rotate(45deg); }
+  .titlebar .close-btn:hover::after{ opacity:1; transform: translate(-50%,-50%) rotate(-45deg); }
+
+  .titlebar .titletext{
+    margin-left:12px;
+    color: var(--text-muted);
+  }
+
+  .window-body{
+    flex:1;
+    overflow-y:auto;
+    padding:32px 36px;
+    font-family: var(--sans);
+  }
+  .window-body::-webkit-scrollbar{ width:8px; }
+  .window-body::-webkit-scrollbar-thumb{ background: var(--border-mid); border-radius:4px; }
+
+  .placeholder-note{
+    color: var(--text-muted);
+    font-size:14px;
+    line-height:1.7;
+    border:1px dashed var(--border-mid);
+    border-radius:8px;
+    padding:16px 18px;
+    font-family: var(--mono);
+    font-size:12.5px;
+  }
+
+  .window-body h1{
+    font-size:20px;
+    margin:0 0 6px;
+    font-weight:600;
+  }
+  .window-body .sub{
+    color: var(--text-muted);
+    font-size:13px;
+    margin:0 0 24px;
+    font-family: var(--mono);
+  }
+
+  #window-dev .window-body{ padding:0; }
+  .dev-scroll{ padding:28px 32px 40px; }
+
+  .dev-header{ margin-bottom:8px; }
+  .dev-header h1{ font-size:20px; margin:0 0 4px; font-weight:600; }
+  .dev-header .role{ font-family:var(--mono); font-size:12px; color:var(--text-muted); }
+  .dev-header .quick-facts{
+    display:flex; flex-wrap:wrap; gap:6px 14px;
+    margin-top:12px;
+    font-family:var(--mono); font-size:11px; color:var(--text-faint);
+  }
+
+  .dev-section{
+    margin-top:30px;
+    padding-top:22px;
+    border-top:1px solid var(--border-subtle);
+  }
+  .dev-section .sec-label{
+    font-family:var(--mono); font-size:11px; color:var(--accent-amber);
+    letter-spacing:0.04em;
+    margin-bottom:14px;
+  }
+  .dev-section p{ font-size:13.5px; line-height:1.75; color:var(--text-muted); margin:0 0 12px; }
+
+  .entry{ margin-bottom:20px; }
+  .entry:last-child{ margin-bottom:0; }
+  .entry .entry-title{ font-size:14px; font-weight:600; color:var(--text-primary); }
+  .entry .entry-org{ font-family:var(--mono); font-size:11.5px; color:var(--text-muted); margin-top:2px; }
+  .entry ul{ margin:10px 0 10px 18px; padding:0; font-size:13px; color:var(--text-muted); line-height:1.7; }
+  .entry li{ margin-bottom:4px; }
+
+  .tag-row{ display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .tag{
+    font-family:var(--mono); font-size:10.5px; color:var(--text-muted);
+    background:rgba(255,255,255,0.04); border:1px solid var(--border-subtle);
+    border-radius:4px; padding:2px 7px;
+  }
+
+  .skills-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:18px; }
+  .skills-grid .skill-cat-label{ font-size:11.5px; color:var(--text-primary); font-weight:600; margin-bottom:8px; }
+  .skills-grid .tag-row{ margin-top:0; }
+
+  .project-card{
+    border:1px solid var(--border-subtle);
+    border-radius:8px;
+    padding:14px 16px;
+    margin-bottom:14px;
+  }
+  .project-card:last-child{ margin-bottom:0; }
+  .project-card .proj-kicker{ font-family:var(--mono); font-size:10px; color:var(--text-faint); margin-bottom:4px; }
+  .project-card .proj-title{ font-size:13.5px; font-weight:600; color:var(--text-primary); }
+  .project-card p{ margin:8px 0; }
+  .project-card a{ color:var(--accent-amber); text-decoration:none; font-family:var(--mono); font-size:11.5px; }
+  .project-card a:hover{ text-decoration:underline; }
+
+  .research-item{ margin-bottom:14px; }
+  .research-item:last-child{ margin-bottom:0; }
+  .research-item .r-title{ font-size:13px; color:var(--text-primary); }
+  .research-item .r-meta{ font-family:var(--mono); font-size:10.5px; color:var(--text-faint); margin:2px 0 4px; }
+  .research-item a{ color:var(--accent-amber); font-family:var(--mono); font-size:11.5px; text-decoration:none; }
+  .research-item a:hover{ text-decoration:underline; }
+
+  .contact-links{ display:flex; flex-wrap:wrap; gap:10px 18px; margin-top:4px; }
+  .contact-links a{
+    font-family:var(--mono); font-size:12px; color:var(--text-primary);
+    text-decoration:none; border-bottom:1px solid var(--border-mid);
+    padding-bottom:1px;
+  }
+  .contact-links a:hover{ color:var(--accent-amber); border-color:var(--accent-amber); }
+
+  /* personal window flavor — rivendell theme (autumn red) */
+  #window-personal{
+    --accent-realm: #c1543f;
+    --surface-window: #201613;
+    --surface-titlebar: #2b1c17;
+    --border-subtle: rgba(197,120,90,0.14);
+    --border-mid: rgba(197,120,90,0.32);
+    --text-primary: #ece0d6;
+    --text-muted: #b89484;
+    --text-faint: #7a5c50;
+    --accent-amber: #c1543f;
+    background:
+      radial-gradient(ellipse at 15% -15%, rgba(196,90,60,0.12), transparent 55%),
+      var(--surface-window);
+  }
+  #window-personal .titletext{ color: var(--accent-realm); }
+  #window-personal .titlebar{ display:flex; align-items:center; }
+  #window-personal .window-body{ padding:0; }
+  #window-personal .window-body h1{ font-family: var(--mono); letter-spacing:0.02em; color: var(--accent-realm); }
+  #window-personal .sec-label{ color: var(--accent-realm); }
+  #window-personal .contact-links a:hover{ color: var(--accent-realm); border-color: var(--accent-realm); }
+  #window-personal .project-card a{ color: var(--accent-realm); }
+  #window-personal .quote-block{
+    font-family: var(--sans);
+    font-style:italic;
+    color: var(--text-muted);
+    border-left:2px solid var(--accent-realm);
+    padding-left:14px;
+    margin:14px 0;
+    font-size:13px;
+    line-height:1.7;
+  }
+  #window-personal .footer-credit{
+    margin-top:34px;
+    padding-top:16px;
+    border-top:1px solid var(--border-subtle);
+    font-family:var(--mono);
+    font-size:10px;
+    color:var(--text-faint);
+    letter-spacing:0.04em;
+  }
+  .ambience-toggle{
+    display:flex; align-items:center; gap:6px;
+    margin-left:auto;
+    background:none; border:none;
+    color: var(--text-muted);
+    font-family: var(--mono); font-size:10.5px;
+    cursor:pointer;
+    padding:2px 6px;
+  }
+  .ambience-toggle:hover{ color: var(--accent-realm); }
+  .ambience-toggle.on{ color: var(--accent-realm); }
+  .ambience-toggle svg{ width:12px; height:12px; }
+</style>
 </head>
 <body>
 
@@ -283,25 +856,31 @@
       <div class="dev-scroll">
         <div class="dev-header">
           <h1>Nitin Ranjan</h1>
-          <div class="role">Amateur Poet, Designer and Philosopher</div>
+          <div class="role">Building systems that scale · Forging code that endures</div>
           <div class="role" style="margin-top:6px;">"Quarks stick, neutrinos live lonely — I live in uncertainty."</div>
         </div>
 
         <div class="dev-section">
           <div class="sec-label">I — of origins & pursuits</div>
           <div class="tag-row" style="margin-bottom:14px;">
+            <span class="tag">⚒ Software Development Engineer, Fiserv</span>
+            <span class="tag">🎓 B.Tech CSE · VIT University · CGPA 8.72</span>
             <span class="tag">📍 Pune, India</span>
+            <span class="tag">✉ nitinranjan.work@gmail.com</span>
           </div>
           <div class="tag-row" style="margin-bottom:14px;">
-            <span class="tag">⚛ Physics enthusiast</span>
-            <span class="tag">🗾 こんにちは</span>
+            <span class="tag">⚛ できます · Physics enthusiast</span>
+            <span class="tag">🗾 こんにちは — always learning, always curious</span>
           </div>
           <div class="tag-row">
             <span class="tag">☕ Coffee</span><span class="tag">Books</span><span class="tag">Music</span>
             <span class="tag">Philosophy</span><span class="tag">Kathak</span>
+            <span class="tag">✦ Forever Learning good code</span>
           </div>
-          <p style="margin-top:16px;"></p>
-          <div class="quote-block">"A good design is pleasing. A good book is interesting. Aesthetic and the evolution should move together."</div>
+          <p style="margin-top:16px;">A software engineer with over three years of crafting scalable systems at Fiserv — where financial infrastructure serves hundreds of thousands of users, and every line of code carries weight. Forged at VIT University, where a love for computer science was kindled alongside a final year's worth of research on Data and its visualisation.</p>
+          <p>The work spans Java, SQL, Spring Boot, AWS, and beyond — from migrating legacy modules to modernizing data pipelines. But the curiosity doesn't stop at the terminal. Physics, design, language, and the beautiful uncertainty at the intersection of all three are what make the craft worth pursuing.</p>
+          <p>Life is never just code — it's a question asked of the universe, hoping for a useful answer. But code certainly helps better connect with this universe.</p>
+          <div class="quote-block">"A good design is pleasing. A good book is interesting. Technology is always evolving. I try to keep the aesthetic and the evolution together."</div>
         </div>
 
         <div class="dev-section">
@@ -310,7 +889,7 @@
           <div class="project-card">
             <div class="proj-kicker">Philosophy</div>
             <div class="proj-title">The Good Philosopher</div>
-            <p>A Philosopher must know that they need to know.  A collection of Instagram reels exploring folk-lore, legends, and philosophy.</p>
+            <p>A Philosopher must know. If not, he/she/they must have the zeal to know. A collection of Instagram reels exploring folk-lore, legends, and philosophy.</p>
             <p><a href="https://www.instagram.com/histosophia/" target="_blank" rel="noopener">View on Instagram →</a></p>
           </div>
 
@@ -327,7 +906,10 @@
           <div class="quote-block">"It's never a bad time to connect."</div>
           <div class="contact-links">
             <a href="mailto:nitinranjan.work@gmail.com">✉ Email</a>
-            <a href="https://x.com/KaagazKePanchhi" target="_blank" rel="noopener">✕ @KaagazKePanchhi</a>
+            <a href="https://linkedin.com/in/nitin-ranjan-here" target="_blank" rel="noopener">in LinkedIn</a>
+            <a href="https://github.com/NitinR2510" target="_blank" rel="noopener">⌥ GitHub</a>
+            <a href="https://public.tableau.com/app/profile/nitin4471" target="_blank" rel="noopener">◈ Tableau</a>
+            <a href="https://twitter.com/Nitinagainr" target="_blank" rel="noopener">✕ @Nitinagainr</a>
           </div>
           <p style="margin-top:24px; font-family:var(--mono); font-size:10.5px; color:var(--text-faint); letter-spacing:0.05em;">✦ BREATHE ✦ RELAX ✦ BLINK ✦</p>
         </div>
@@ -338,6 +920,391 @@
   </div>
 </div>
 
-<script src="script.js"></script>
+<script>
+  // clock
+  function tick(){
+    const el = document.getElementById('clock');
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    el.textContent = h + ':' + m + ' · IST';
+  }
+  tick();
+  setInterval(tick, 1000 * 15);
+
+  // cycling status line — small authentic-engineer touch
+  const statuses = [
+    'git status: clean',
+    'build: passing',
+    'uptime: 3y 2mo',
+    'coffee: brewing'
+  ];
+  let sIdx = 0;
+  setInterval(() => {
+    sIdx = (sIdx + 1) % statuses.length;
+    document.getElementById('statusLine').textContent = statuses[sIdx];
+  }, 4000);
+
+  // window open/close — only one at a time
+  const icons = document.querySelectorAll('.app-icon');
+  const windows = document.querySelectorAll('.window');
+  const windowTitles = { dev: 'nitin_os — developer.app', personal: 'nitin_os — personal.app' };
+  const baseTitle = document.title;
+
+  function setHash(name){
+    // replaceState avoids piling up history entries on every window switch
+    if(name) history.replaceState(null, '', '#' + name);
+    else history.replaceState(null, '', location.pathname + location.search);
+  }
+
+  function closeAll(){
+    windows.forEach(w => w.classList.remove('open'));
+    icons.forEach(i => i.setAttribute('aria-expanded','false'));
+    setHash(null);
+    document.title = baseTitle;
+  }
+
+  function openWindow(name, opts){
+    closeAll();
+    const win = document.getElementById('window-' + name);
+    if(!win) return;
+    win.classList.add('open');
+    const icon = document.querySelector('.app-icon[data-window="'+name+'"]');
+    if(icon) icon.setAttribute('aria-expanded','true');
+    const closeBtn = win.querySelector('.close-btn');
+    if(closeBtn && !(opts && opts.skipFocus)) closeBtn.focus();
+    setHash(name);
+    document.title = windowTitles[name] || baseTitle;
+  }
+
+  icons.forEach(icon => {
+    icon.addEventListener('click', () => openWindow(icon.dataset.window));
+  });
+
+  document.querySelectorAll('[data-close]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      closeAll();
+      const opener = document.querySelector('.app-icon[data-window="'+btn.dataset.close+'"]');
+      if(opener) opener.focus();
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape') closeAll();
+  });
+
+  // deep-link support: #dev / #personal open a window directly, shareable + back/forward aware
+  function handleHash(){
+    const name = location.hash.replace('#', '');
+    if(name === 'dev' || name === 'personal') openWindow(name, { skipFocus: true });
+    else closeAll();
+  }
+  window.addEventListener('hashchange', handleHash);
+  handleHash();
+
+  // ---------- info dialog: edge checkbox toggle + profile rows ----------
+  const infoToggle = document.getElementById('infoToggle');
+  const infoDialog = document.getElementById('infoDialog');
+
+  infoToggle.addEventListener('change', () => {
+    infoDialog.classList.toggle('open', infoToggle.checked);
+  });
+
+  document.getElementById('copyrightYear').textContent = new Date().getFullYear();
+
+  document.querySelectorAll('.info-dialog .profile-row').forEach(btn => {
+    btn.addEventListener('click', () => {
+      openWindow(btn.dataset.window);
+      infoToggle.checked = false;
+      infoDialog.classList.remove('open');
+    });
+  });
+
+  // ---------- contribution heatmap: renders GitHub calendar aligned by weekday ----------
+  const GITHUB_USERNAME = 'NitinR2510';
+
+  // level 0-4 -> low-contrast so it sits into the background, brightens with activity
+  const LEVEL_COLOR = [
+    'rgba(255,255,255,0.05)', // level 0 — no contributions, still a visible cell
+    'rgba(125,211,168,0.28)',
+    'rgba(125,211,168,0.48)',
+    'rgba(125,211,168,0.72)',
+    'rgba(168,240,198,0.95)'  // level 4 — heaviest day
+  ];
+  const LEVEL_LABEL = ['No contributions','Light','Moderate','Active','Heavy'];
+
+  function renderHeatmap(days){
+    const strip = document.getElementById('forestStrip');
+    strip.innerHTML = '';
+
+    if(days.length){
+      // pad the front so the first real day lands in its correct weekday row (0=Sun)
+      const firstDate = new Date(days[0].date + 'T00:00:00Z');
+      const leadingBlanks = firstDate.getUTCDay();
+      for(let i = 0; i < leadingBlanks; i++){
+        const blank = document.createElement('div');
+        blank.className = 'cell empty';
+        strip.appendChild(blank);
+      }
+    }
+
+    days.forEach(day => {
+      const level = day.level || 0;
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.style.background = LEVEL_COLOR[level] || LEVEL_COLOR[0];
+      cell.title = `${day.date} — ${LEVEL_LABEL[level] || LEVEL_LABEL[0]}`;
+      strip.appendChild(cell);
+    });
+  }
+
+  function fallbackHeatmap(){
+    // quiet, uniform empty grid — used if the API is unreachable, never shows an error
+    const blankDays = new Array(371).fill(0).map((_, i) => ({ date:'', level:0 }));
+    renderHeatmap(blankDays);
+  }
+
+  async function loadHeatmap(){
+    try{
+      const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}?y=last`);
+      if(!res.ok) throw new Error('bad response');
+      const data = await res.json();
+      const days = data.contributions || [];
+      if(!days.length) throw new Error('no data');
+      renderHeatmap(days);
+    }catch(err){
+      fallbackHeatmap();
+    }
+  }
+
+  loadHeatmap();
+
+  // ---------- radio tray: nearest stations to pune, via radio-browser.info ----------
+  const PUNE = { lat: 18.5204, lon: 73.8567 };
+  let stations = [];
+  let stationIdx = 0;
+  let isPlaying = false;
+  const audio = new Audio();
+  audio.volume = 0.6;
+
+  function haversine(lat1, lon1, lat2, lon2){
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+
+  async function loadStations(){
+    try{
+      const res = await fetch('https://de1.api.radio-browser.info/json/stations/search?has_geo_info=true&hidebroken=true&is_https=true&countrycode=IN&order=clickcount&reverse=true&limit=200');
+      if(!res.ok) throw new Error('bad response');
+      const data = await res.json();
+      stations = data
+        .filter(s => s.geo_lat && s.geo_long && s.url_resolved)
+        .map(s => ({ ...s, distance: haversine(PUNE.lat, PUNE.lon, s.geo_lat, s.geo_long) }))
+        .sort((a, b) => a.distance - b.distance)
+        .slice(0, 15);
+      if(!stations.length) throw new Error('no stations');
+      document.getElementById('stationName').textContent = stations[0].name;
+      document.getElementById('stationSub').textContent = Math.round(stations[0].distance) + ' km from pune';
+    }catch(err){
+      document.getElementById('stationName').textContent = 'unavailable';
+      document.getElementById('stationSub').textContent = 'try again later';
+    }
+  }
+
+  function playCurrent(){
+    if(!stations.length) return;
+    const s = stations[stationIdx];
+    audio.src = s.url_resolved;
+    audio.play().catch(() => skipStation());
+    document.getElementById('stationName').textContent = s.name;
+    document.getElementById('stationSub').textContent = Math.round(s.distance) + ' km from pune';
+  }
+
+  function skipStation(){
+    if(!stations.length) return;
+    stationIdx = (stationIdx + 1) % stations.length;
+    if(isPlaying) playCurrent();
+    else{
+      const s = stations[stationIdx];
+      document.getElementById('stationName').textContent = s.name;
+      document.getElementById('stationSub').textContent = Math.round(s.distance) + ' km from pune';
+    }
+  }
+
+  audio.addEventListener('error', () => { if(isPlaying) skipStation(); });
+
+  const radioBtn = document.getElementById('radioBtn');
+  const radioPopover = document.getElementById('radioPopover');
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const skipBtn = document.getElementById('skipBtn');
+
+  radioBtn.addEventListener('click', () => {
+    const open = radioPopover.classList.toggle('open');
+    radioBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  document.addEventListener('click', (e) => {
+    if(!e.target.closest('.radio-tray')) radioPopover.classList.remove('open');
+  });
+
+  playPauseBtn.addEventListener('click', () => {
+    if(isPlaying){
+      audio.pause();
+      isPlaying = false;
+      playPauseBtn.textContent = 'play';
+      radioBtn.classList.remove('playing');
+    }else{
+      playCurrent();
+      isPlaying = true;
+      playPauseBtn.textContent = 'pause';
+      radioBtn.classList.add('playing');
+    }
+  });
+
+  skipBtn.addEventListener('click', skipStation);
+
+  loadStations();
+
+  // ---------- ambience toggle (personal.app) ----------
+  const ambienceToggle = document.getElementById('ambienceToggle');
+  const ambienceLabel = document.getElementById('ambienceLabel');
+  let ambienceOn = false;
+
+  ambienceToggle.addEventListener('click', () => {
+    if(!ambienceOn){
+      ambientMusic.start();
+      ambienceOn = true;
+      ambienceToggle.classList.add('on');
+      ambienceToggle.setAttribute('aria-pressed', 'true');
+      ambienceLabel.textContent = 'ambience';
+    }else{
+      ambientMusic.stop();
+      ambienceOn = false;
+      ambienceToggle.classList.remove('on');
+      ambienceToggle.setAttribute('aria-pressed', 'false');
+      ambienceLabel.textContent = 'ambience';
+    }
+  });
+
+  document.querySelectorAll('.footer-year').forEach(el => {
+    el.textContent = new Date().getFullYear();
+  });
+
+// ── AMBIENT MUSIC ENGINE ──
+const ambientMusic = (function() {
+  let ctx = null, playing = false, masterGain = null;
+
+  function buildAudio() {
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(0, ctx.currentTime);
+    masterGain.gain.linearRampToValueAtTime(0.38, ctx.currentTime + 3);
+    masterGain.connect(ctx.destination);
+
+    const conv = ctx.createConvolver();
+    const revLen = ctx.sampleRate * 4;
+    const revBuf = ctx.createBuffer(2, revLen, ctx.sampleRate);
+    for (let c = 0; c < 2; c++) {
+      const d = revBuf.getChannelData(c);
+      for (let i = 0; i < revLen; i++)
+        d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / revLen, 2.5);
+    }
+    conv.buffer = revBuf;
+    const revGain = ctx.createGain(); revGain.gain.value = 0.45;
+    conv.connect(revGain); revGain.connect(masterGain);
+    const dryGain = ctx.createGain(); dryGain.gain.value = 0.55;
+    dryGain.connect(masterGain);
+
+    function connect(node) { node.connect(dryGain); node.connect(conv); }
+
+    [[110,0.06],[164.81,0.04],[55,0.03]].forEach(([freq,vol]) => {
+      const osc = ctx.createOscillator(), g = ctx.createGain();
+      osc.type = 'sine'; osc.frequency.value = freq;
+      const vib = ctx.createOscillator(), vibG = ctx.createGain();
+      vib.frequency.value = 0.18; vibG.gain.value = 0.4;
+      vib.connect(vibG); vibG.connect(osc.frequency); vib.start();
+      g.gain.value = vol; osc.connect(g); connect(g); osc.start();
+    });
+
+    const harpNotes = [220,261.63,293.66,329.63,392,440,523.25,587.33,659.25];
+    const patterns = [0,2,4,5,7,4,2,0,2,5,7,0,4,7,5,2];
+    let patIdx = 0;
+    function harpNote() {
+      const note = harpNotes[patterns[patIdx % patterns.length] % harpNotes.length];
+      patIdx++;
+      const osc = ctx.createOscillator(), env = ctx.createGain();
+      osc.type = 'sine'; osc.frequency.value = note;
+      env.gain.setValueAtTime(0, ctx.currentTime);
+      env.gain.linearRampToValueAtTime(0.07, ctx.currentTime + 0.04);
+      env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.2);
+      osc.connect(env); connect(env); osc.start(); osc.stop(ctx.currentTime + 2.5);
+      setTimeout(harpNote, (0.55 + Math.random() * 0.65) * 1000);
+    }
+    setTimeout(harpNote, 800);
+
+    [[659.25,0.018],[783.99,0.012],[880,0.009]].forEach(([freq,vol],i) => {
+      const osc = ctx.createOscillator(), g = ctx.createGain();
+      osc.type = 'triangle'; osc.frequency.value = freq;
+      const trem = ctx.createOscillator(), tremG = ctx.createGain();
+      trem.frequency.value = 0.08 + i * 0.03; tremG.gain.value = 0.012;
+      trem.connect(tremG); tremG.connect(g.gain); trem.start();
+      g.gain.value = vol; osc.connect(g); connect(g); osc.start();
+    });
+
+    const bufLen = ctx.sampleRate * 3;
+    const noiseBuf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+    const nd = noiseBuf.getChannelData(0);
+    for (let i = 0; i < bufLen; i++) nd[i] = Math.random() * 2 - 1;
+    const noise = ctx.createBufferSource(); noise.buffer = noiseBuf; noise.loop = true;
+    const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 260; lp.Q.value = 1.5;
+    const ngain = ctx.createGain(); ngain.gain.value = 0.025;
+    const lfo = ctx.createOscillator(), lfoG = ctx.createGain();
+    lfo.frequency.value = 0.06; lfoG.gain.value = 0.015;
+    lfo.connect(lfoG); lfoG.connect(ngain.gain); lfo.start();
+    noise.connect(lp); lp.connect(ngain); connect(ngain); noise.start();
+
+    function bell() {
+      const osc = ctx.createOscillator(), env = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = [523.25,659.25,783.99][Math.floor(Math.random()*3)];
+      env.gain.setValueAtTime(0, ctx.currentTime);
+      env.gain.linearRampToValueAtTime(0.06, ctx.currentTime + 0.1);
+      env.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 7);
+      osc.connect(env); connect(env); osc.start(); osc.stop(ctx.currentTime + 8);
+      setTimeout(bell, 12000 + Math.random() * 6000);
+    }
+    setTimeout(bell, 5000);
+  }
+
+  function fadeOut(cb) {
+    if (!masterGain) return cb && cb();
+    masterGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.5);
+    setTimeout(cb, 1600);
+  }
+  function fadeIn() {
+    masterGain.gain.cancelScheduledValues(ctx.currentTime);
+    masterGain.gain.setValueAtTime(masterGain.gain.value || 0, ctx.currentTime);
+    masterGain.gain.linearRampToValueAtTime(0.38, ctx.currentTime + 2);
+  }
+
+  function start() {
+    if (!ctx) { buildAudio(); playing = true; return; }
+    if (!playing) { ctx.resume().then(fadeIn); playing = true; }
+  }
+
+  function stop() {
+    if (ctx && playing) { fadeOut(() => ctx.suspend()); playing = false; }
+  }
+
+  function isPlaying() { return playing; }
+
+  return { start, stop, isPlaying };
+})();
+
+</script>
+
 </body>
 </html>
