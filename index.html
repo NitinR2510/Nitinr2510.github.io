@@ -578,7 +578,52 @@
   }
   .ambience-toggle:hover{ color: var(--accent-realm); }
   .ambience-toggle.on{ color: var(--accent-realm); }
-  .ambience-toggle svg{ width:12px; height:12px; }
+  .ambience-toggle svg{ width:12px; height:12px; }  .side-readout{
+    position:absolute;
+    left:24px; top:50%;
+    transform:translateY(-50%);
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    max-width:160px;
+    font-family: var(--mono);
+    font-size:11px;
+    z-index:3;
+    pointer-events:auto;
+  }
+  .side-readout .stat-label{
+    color: var(--accent-amber);
+    font-size:9.5px;
+    letter-spacing:0.06em;
+    margin-bottom:4px;
+  }
+  .side-readout .stat-value{
+    color: var(--text-muted);
+    line-height:1.5;
+  }
+  .side-readout a{
+    color: var(--text-primary);
+    text-decoration:none;
+    border-bottom:1px solid var(--border-mid);
+    padding-bottom:1px;
+  }
+  .side-readout a:hover{
+    color: var(--accent-amber);
+    border-color: var(--accent-amber);
+  }
+  .office-line{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    font-size:11px;
+    text-decoration:none;
+  }
+  .office-line:hover{ color: var(--text-primary); }
+  .office-line:hover svg{ stroke: var(--accent-amber); }
+  .office-line svg{ width:11px; height:11px; flex-shrink:0; stroke: var(--text-faint); transition: stroke 0.15s ease; }
+
 </style>
 </head>
 <body>
@@ -588,6 +633,28 @@
     <div class="topbar-left"><span class="mark">▤</span> N·R</div>
     <div class="topbar-center"><span class="dot"></span><span id="statusLine">git status: clean</span></div>
     <div class="topbar-right" id="clock">--:--</div>
+  </div>
+
+  <div class="side-readout">
+    <div>
+      <div class="stat-label">WORKPLACE</div>
+      <a class="office-line" href="https://www.google.com/maps?q=Fiserv+India+Pvt+Ltd+Pune" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 21s7-6.2 7-11.5S16.4 2 12 2 5 4.7 5 9.5 12 21 12 21z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+          <circle cx="12" cy="9.5" r="2.3" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <span>Fiserv India Pvt Ltd, Pune</span>
+      </a>
+      <div class="stat-value" id="tenureSubline" style="font-size:10px; color:var(--text-faint); margin-top:2px;">—</div>
+    </div>
+    <div>
+      <div class="stat-label">I AM ALSO FOUND IN —</div>
+      <div class="stat-value">Koregaon Park, Pune</div>
+    </div>
+    <div>
+      <div class="stat-label">NOW BUILDING</div>
+      <div class="stat-value" id="buildingStat">loading…</div>
+    </div>
   </div>
 
   <div class="desktop-surface">
@@ -1294,6 +1361,71 @@ const ambientMusic = (function() {
   function isPlaying() { return playing; }
 
   return { start, stop, isPlaying };
+})();
+
+(function(){
+  const tenureEl = document.getElementById('tenureSubline');
+  const buildingEl = document.getElementById('buildingStat');
+
+  // exact start date — full calendar diff, years/months/days
+  function computeTenure(){
+    const start = new Date(2022, 7, 22); // Aug 22, 2022
+    const now = new Date();
+    let years = now.getFullYear() - start.getFullYear();
+    let months = now.getMonth() - start.getMonth();
+    let days = now.getDate() - start.getDate();
+    if(days < 0){
+      months -= 1;
+      const prevMonthLastDay = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+      days += prevMonthLastDay;
+    }
+    if(months < 0){
+      years -= 1;
+      months += 12;
+    }
+    tenureEl.textContent = `${years}y ${months}mo ${days}d`;
+  }
+  computeTenure();
+
+  async function loadLatestRepo(){
+    const CACHE_KEY = 'nitin_os_latest_repo';
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+
+    function renderRepo(repo){
+      buildingEl.innerHTML = '';
+      const link = document.createElement('a');
+      link.href = repo.url;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.textContent = repo.name;
+      buildingEl.appendChild(link);
+    }
+
+    // try cache first — skip the network entirely if it's still fresh
+    try{
+      const cached = JSON.parse(localStorage.getItem(CACHE_KEY));
+      if(cached && cached.name && cached.url && (Date.now() - cached.timestamp) < ONE_DAY){
+        renderRepo(cached);
+        return;
+      }
+    }catch(err){
+      // no valid cache, or localStorage unavailable — fall through to fetch
+    }
+
+    try{
+      const res = await fetch('https://api.github.com/users/NitinR2510/repos?sort=pushed&direction=desc&per_page=10');
+      if(!res.ok) throw new Error('bad response');
+      const repos = await res.json();
+      const latest = repos.find(r => !r.fork);
+      if(!latest) throw new Error('no repos');
+      const repo = { name: latest.name, url: latest.html_url, timestamp: Date.now() };
+      renderRepo(repo);
+      try{ localStorage.setItem(CACHE_KEY, JSON.stringify(repo)); }catch(err){ /* storage unavailable — non-fatal */ }
+    }catch(err){
+      buildingEl.textContent = '—';
+    }
+  }
+  loadLatestRepo();
 })();
 
 </script>
