@@ -1048,7 +1048,7 @@
       </span>
       <span class="label-group">
         <span class="label" id="ambienceMobileLabel">ambience</span>
-        <span class="app-desc">a little something for the ears</span>
+        <span class="app-desc" id="ambienceMobileDesc">a little something for your ears</span>
       </span>
     </button>
 
@@ -1746,6 +1746,7 @@
   const ambienceLabel = document.getElementById('ambienceLabel');
   const ambienceToggleMobile = document.getElementById('ambienceToggleMobile');
   const ambienceMobileLabel = document.getElementById('ambienceMobileLabel');
+  const ambienceMobileDesc = document.getElementById('ambienceMobileDesc');
 
   function syncAmbienceUI(){
     const on = ambientMusic.isPlaying();
@@ -1754,7 +1755,8 @@
     ambienceLabel.textContent = 'ambience';
     ambienceToggleMobile.classList.toggle('on', on);
     ambienceToggleMobile.setAttribute('aria-pressed', on ? 'true' : 'false');
-    ambienceMobileLabel.textContent = on ? 'ambience — playing' : 'ambience';
+    ambienceMobileLabel.textContent = on ? 'ambience - playing' : 'ambience - click to play';
+    ambienceMobileDesc.textContent = on ? 'click to stop' : 'a little something for your ears';
   }
 
   function toggleAmbience(){
