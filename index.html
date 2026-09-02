@@ -150,6 +150,7 @@
   .back-label{ display:none; }
   .mobile-page-footer{ display:none; }
   .mobile-crest-inline{ display:none; }
+  .mobile-globe{ display:none; }
 
   /* ---------- contribution heatmap strip (merges into background) ---------- */
   .forest-strip{
@@ -862,6 +863,38 @@
       padding:0 20px;
     }
 
+    /* ---------- pixel globe: mobile home-screen only, sits above
+       the icon list, marks Pune with a rotating amber dot ---------- */
+    .mobile-globe{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:8px;
+      align-self:center;
+      margin-bottom:6px;
+    }
+    .mobile-globe canvas{
+      width:64px; height:64px;
+      image-rendering:pixelated;
+    }
+    .mobile-globe-label{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      font-family:var(--mono);
+      font-size:10.5px;
+      letter-spacing:0.05em;
+      text-transform:uppercase;
+      color:var(--text-faint);
+    }
+    .mobile-globe-label .globe-dot{
+      width:5px; height:5px;
+      border-radius:50%;
+      background:var(--accent-amber);
+      box-shadow:0 0 6px rgba(224,164,88,0.55);
+      flex-shrink:0;
+    }
+
     .app-icon, .mobile-ambience-row{
       display:flex;
       flex-direction:row;
@@ -1011,6 +1044,11 @@
   </div>
 
   <div class="desktop-surface">
+    <div class="mobile-globe" aria-hidden="true">
+      <canvas id="globeCanvas" width="64" height="64"></canvas>
+      <div class="mobile-globe-label"><span class="globe-dot"></span>pune, maharashtra</div>
+    </div>
+
     <button class="app-icon" data-window="dev" aria-haspopup="dialog" aria-expanded="false">
       <span class="icon-box">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1952,6 +1990,94 @@ const ambientMusic = (function() {
     }
   }
   loadLatestRepo();
+})();
+
+// ── PIXEL GLOBE: rotating dot-sphere, amber marker on Pune, MH ──
+(function(){
+  const canvas = document.getElementById('globeCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const size = 64;
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  ctx.scale(dpr, dpr);
+
+  const R = size / 2 - 4;
+  const cx = size / 2, cy = size / 2;
+
+  // even dot coverage over the sphere surface (golden-angle spiral)
+  const N = 130;
+  const pts = [];
+  for(let i = 0; i < N; i++){
+    const y = 1 - (i / (N - 1)) * 2;
+    const r = Math.sqrt(1 - y * y);
+    const theta = Math.PI * (3 - Math.sqrt(5)) * i;
+    pts.push({ x: Math.cos(theta) * r, y, z: Math.sin(theta) * r });
+  }
+
+  // Pune, Maharashtra — 18.52°N, 73.85°E
+  const lat = 18.52 * Math.PI / 180;
+  const lon = 73.85 * Math.PI / 180;
+  const pune = {
+    x: Math.cos(lat) * Math.cos(lon),
+    y: Math.sin(lat),
+    z: Math.cos(lat) * Math.sin(lon)
+  };
+
+  function rotateY(p, a){
+    const c = Math.cos(a), s = Math.sin(a);
+    return { x: p.x * c + p.z * s, y: p.y, z: -p.x * s + p.z * c };
+  }
+
+  let angle = 0.5;
+
+  function draw(){
+    ctx.clearRect(0, 0, size, size);
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    ctx.stroke();
+
+    pts.forEach(p => {
+      const rp = rotateY(p, angle);
+      if(rp.z < -0.15) return;
+      const depth = (rp.z + 1) / 2;
+      const px = cx + rp.x * R;
+      const py = cy - rp.y * R;
+      const s = depth > 0.6 ? 2 : 1;
+      ctx.fillStyle = `rgba(139,144,153,${0.15 + depth * 0.35})`;
+      ctx.fillRect(Math.round(px - s / 2), Math.round(py - s / 2), s, s);
+    });
+
+    const rm = rotateY(pune, angle);
+    if(rm.z > -0.15){
+      const depth = (rm.z + 1) / 2;
+      const mx = cx + rm.x * R;
+      const my = cy - rm.y * R;
+      ctx.fillStyle = `rgba(224,164,88,${0.5 + depth * 0.5})`;
+      ctx.fillRect(Math.round(mx - 1.5), Math.round(my - 1.5), 3, 3);
+      if(rm.z > 0.55){
+        ctx.strokeStyle = `rgba(224,164,88,${((rm.z - 0.55) / 0.45) * 0.8})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(mx, my, 4.5, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
+  }
+
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    draw();
+  }else{
+    (function loop(){
+      angle += 0.006;
+      draw();
+      requestAnimationFrame(loop);
+    })();
+  }
 })();
 
 </script>
