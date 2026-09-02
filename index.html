@@ -143,6 +143,14 @@
 
   .icon-box svg{ width:26px; height:26px; }
 
+  .label-group{ display:contents; }
+  .app-desc{ display:none; }
+  .mobile-ambience-row{ display:none; }
+  .mobile-home-footer{ display:none; }
+  .back-label{ display:none; }
+  .mobile-page-footer{ display:none; }
+  .mobile-crest-inline{ display:none; }
+
   /* ---------- contribution heatmap strip (merges into background) ---------- */
   .forest-strip{
     position:absolute;
@@ -820,9 +828,17 @@
      RESPONSIVE — phone only (<=600px)
      ============================================================ */
   @media (max-width:600px){
-    /* purely decorative background flourish — not worth the
-       squeeze at phone width */
+    /* purely decorative background flourishes — not part of the
+       mobile-native home screen */
     .forest-strip{ display:none; }
+    .radio-tray{ display:none; }
+    .edge-toggle{ display:none; }
+    .info-dialog{ display:none; }
+
+    /* top bar strips down to just a name badge — no clock, no
+       cycling status, nothing that implies a desktop */
+    .topbar-center, .topbar-right{ display:none; }
+    .topbar{ justify-content:center; }
 
     /* windows become a full-screen takeover rather than a
        floating card, since there's no spare canvas around them */
@@ -836,40 +852,129 @@
     }
     .window.open{ transform:none; }
 
-    .desktop-surface{ gap:28px; }
+    /* ---------- home screen: vertical list of long tappable rows,
+       not a shrunk desktop icon grid ---------- */
+    .desktop-surface{
+      flex-direction:column;
+      align-items:stretch;
+      justify-content:center;
+      gap:12px;
+      padding:0 20px;
+    }
 
-    /* phone is the most touch-first surface of all — icons go bigger
-       again here, closer to a real home-screen app icon than a
-       desktop-icon-that-got-smaller */
-    .app-icon{ padding:14px; }
-    .app-icon .icon-box{ width:84px; height:84px; }
-    .icon-box svg{ width:39px; height:39px; }
-    .app-icon .label{ font-size:14.5px; }
+    .app-icon, .mobile-ambience-row{
+      display:flex;
+      flex-direction:row;
+      align-items:center;
+      justify-content:flex-start;
+      gap:14px;
+      width:100%;
+      padding:16px 16px;
+      border:1px solid var(--border-subtle);
+      border-radius:12px;
+      background: rgba(255,255,255,0.03);
+      text-align:left;
+    }
+    .app-icon .icon-box, .mobile-ambience-row .icon-box{
+      width:46px; height:46px;
+      flex-shrink:0;
+    }
+    .app-icon .icon-box svg, .mobile-ambience-row .icon-box svg{ width:22px; height:22px; }
+
+    .label-group{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:3px;
+    }
+    .app-icon .label, .mobile-ambience-row .label{ font-size:15px; }
+    .app-desc{
+      display:block;
+      font-family: var(--mono);
+      font-size:11px;
+      color: var(--text-faint);
+    }
+    .app-icon::after, .mobile-ambience-row::after{
+      content:"›";
+      margin-left:auto;
+      color: var(--text-faint);
+      font-size:22px;
+      line-height:1;
+    }
+    /* the ambience row doesn't navigate anywhere — no chevron implying it opens */
+    .mobile-ambience-row::after{ content:""; }
+    .mobile-ambience-row.on{ border-color: rgba(197,120,90,0.4); }
+    .mobile-ambience-row.on .icon-box svg{ stroke: var(--accent-realm); }
+    .mobile-ambience-row.on .label{ color: var(--accent-realm); }
+
+    .mobile-home-footer{
+      display:block;
+      text-align:center;
+      margin-top:20px;
+      font-family: var(--mono);
+      font-size:10px;
+      color: var(--text-faint);
+      letter-spacing:0.04em;
+    }
 
     #window-personal .dev-header{ flex-wrap:wrap; row-gap:10px; }
     .header-flag{ width:28px; height:40px; }
 
-    .topbar-center{ display:none; }
+    /* ---------- titlebar becomes a mobile app header: close → back ---------- */
+    .titlebar{ height:52px; padding:0 8px 0 4px; }
+    .titlebar .close-btn{
+      width:auto; height:auto;
+      border:none; background:none;
+      border-radius:6px;
+      padding:10px 10px;
+    }
+    .titlebar .close-btn:hover{ background: rgba(255,255,255,0.06); }
+    .titlebar .close-btn::before, .titlebar .close-btn::after{ display:none; }
+    .back-label{
+      display:inline;
+      font-family: var(--mono);
+      font-size:14px;
+      color: var(--text-primary);
+    }
+    .titletext{ font-size:12.5px; }
 
-    /* windows are full-screen here, so the titlebar is effectively
-       a mobile app header — give its controls header-sized targets */
-    .titlebar{ height:48px; }
-    .titlebar .close-btn{ width:24px; height:24px; }
-    .titlebar .close-btn::before, .titlebar .close-btn::after{ width:10px; }
-    .ambience-toggle{ padding:12px; font-size:12px; }
-    .ambience-toggle svg{ width:16px; height:16px; }
-    .crest-toggle{ padding:14px; }
-    .crest-toggle svg{ width:18px; height:18px; }
-
-    .radio-tray{ right:14px; bottom:14px; }
-    .radio-btn{ width:48px; height:48px; }
-    .radio-btn svg{ width:21px; height:21px; }
-
-    .edge-toggle{ padding:12px 18px 12px 14px; gap:9px; }
-    .edge-toggle input[type="checkbox"]{ width:18px; height:18px; }
-    .edge-toggle label{ font-size:13px; }
+    .ambience-toggle{ display:none; } /* replaced by the home-screen row on mobile */
+    /* the tiny titlebar shield overlapped the title text at this
+       width and was too small to invite tapping anyway — replaced
+       by a static crest at the end of the page instead */
+    .crest-toggle{ display:none; }
 
     .crest-modal{ width:min(320px, 90vw); }
+
+    .mobile-crest-inline{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      margin-top:32px;
+      padding-top:24px;
+      border-top:1px solid var(--border-subtle);
+    }
+    .mobile-crest-inline .crest-scene{ width:100%; max-width:200px; height:auto; }
+    .mobile-crest-inline .crest-caption{
+      margin-top:6px;
+      font-family: var(--mono);
+      font-size:9.5px;
+      letter-spacing:0.08em;
+      color: var(--text-faint);
+    }
+
+    /* copyright, now that the info dialog is gone on mobile */
+    .mobile-page-footer{
+      display:block;
+      text-align:center;
+      margin-top:28px;
+      padding-top:16px;
+      border-top:1px solid var(--border-subtle);
+      font-family: var(--mono);
+      font-size:10px;
+      color: var(--text-faint);
+      letter-spacing:0.04em;
+    }
   }
 
 </style>
@@ -914,7 +1019,10 @@
           <path d="M12 15H16" stroke="#e0a458" stroke-width="1.4" stroke-linecap="round"/>
         </svg>
       </span>
-      <span class="label">developer.app</span>
+      <span class="label-group">
+        <span class="label">developer.app</span>
+        <span class="app-desc">the tech story</span>
+      </span>
     </button>
 
     <button class="app-icon" data-window="personal" aria-haspopup="dialog" aria-expanded="false">
@@ -924,8 +1032,27 @@
           <circle cx="12" cy="12" r="3.4" stroke="#c1543f" stroke-width="1.4"/>
         </svg>
       </span>
-      <span class="label">personal.app</span>
+      <span class="label-group">
+        <span class="label">personal.app</span>
+        <span class="app-desc">local adventures &amp; journal</span>
+      </span>
     </button>
+
+    <button class="mobile-ambience-row" id="ambienceToggleMobile" aria-pressed="false">
+      <span class="icon-box">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 18V6l10-2v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="16" cy="16" r="3" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+      </span>
+      <span class="label-group">
+        <span class="label" id="ambienceMobileLabel">ambience</span>
+        <span class="app-desc">a little something for the ears</span>
+      </span>
+    </button>
+
+    <div class="mobile-home-footer">© <span class="footer-year"></span> Nitin Ranjan</div>
   </div>
 
   <div class="forest-strip" id="forestStrip" aria-hidden="true"></div>
@@ -999,7 +1126,7 @@
   <!-- developer window -->
   <div class="window" id="window-dev" role="dialog" aria-label="Developer portfolio window">
     <div class="titlebar">
-      <button class="close-btn" data-close="dev" aria-label="Close window"></button>
+      <button class="close-btn" data-close="dev" aria-label="Close window"><span class="back-label">‹ Back</span></button>
       <span class="titletext">nitin@dev — portfolio</span>
     </div>
     <div class="window-body">
@@ -1172,6 +1299,7 @@
             <a href="https://twitter.com/Nitinagainr" target="_blank" rel="noopener">Twitter</a>
           </div>
         </div>
+        <div class="mobile-page-footer">© <span class="footer-year"></span> Nitin Ranjan</div>
       </div>
     </div>
   </div>
@@ -1179,7 +1307,7 @@
   <!-- personal window -->
   <div class="window" id="window-personal" role="dialog" aria-label="Personal page window">
     <div class="titlebar">
-      <button class="close-btn" data-close="personal" aria-label="Close window"></button>
+      <button class="close-btn" data-close="personal" aria-label="Close window"><span class="back-label">‹ Back</span></button>
       <span class="titletext">Lore — journal</span>
       <button class="ambience-toggle" id="ambienceToggle" aria-pressed="false">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1250,12 +1378,44 @@
           <div class="quote-block">"It's never a bad time to connect."</div>
           <div class="contact-links">
             <a href="mailto:nitinranjan.work@gmail.com">✉ Email</a>
-            <a href="https://linkedin.com/in/nitin-ranjan-fiserv" target="_blank" rel="noopener">in LinkedIn</a>
             <a href="https://github.com/NitinR2510" target="_blank" rel="noopener">⌥ GitHub</a>
             <a href="https://public.tableau.com/app/profile/nitin4471" target="_blank" rel="noopener">◈ Tableau</a>
             <a href="https://x.com/KaagazKePanchhi" target="_blank" rel="noopener">✕ @KaagazKePanchhi</a>
           </div>
           <p style="margin-top:24px; font-family:var(--mono); font-size:10.5px; color:var(--text-faint); letter-spacing:0.05em;">✦ BREATHE ✦ RELAX ✦ BLINK ✦</p>
+        </div>
+
+        <div class="mobile-crest-inline">
+          <svg class="crest-scene" viewBox="0 0 260 200" xmlns="http://www.w3.org/2000/svg">
+            <g>
+              <line x1="46" y1="18" x2="46" y2="176" stroke="#7a5c50" stroke-width="2"/>
+              <path d="M32 18h28v128l-14 18-14-18z" fill="#c1543f"/>
+              <path d="M32 18h28v10h-28z" fill="#c9a35c"/>
+            </g>
+            <g>
+              <line x1="214" y1="18" x2="214" y2="176" stroke="#7a5c50" stroke-width="2"/>
+              <path d="M200 18h28v128l-14 18-14-18z" fill="#c1543f"/>
+              <path d="M200 18h28v10h-28z" fill="#c9a35c"/>
+            </g>
+            <path d="M130 22l38 14v34c0 34-16 60-38 72-22-12-38-38-38-72V36z"
+                  fill="#2b1c17" stroke="#c9a35c" stroke-width="2.5" stroke-linejoin="round"/>
+            <path d="M130 34l27 10v26c0 25-11.5 44-27 53-15.5-9-27-28-27-53V44z"
+                  fill="none" stroke="#c1543f" stroke-width="1.4" opacity="0.6"/>
+            <path d="M152 50
+                     C140 55 123 71 114 93
+                     C111 100 109 107 108 113
+                     L104 120 L110 116
+                     C114 110 118 100 126 88
+                     C136 74 146 60 152 50 Z"
+                  fill="#c9a35c" stroke="#7a5c50" stroke-width="0.6"/>
+            <path d="M150 52 Q128 84 108 114" fill="none" stroke="#8a6a4a" stroke-width="0.9" opacity="0.7"/>
+            <g stroke="#c1543f" fill="none" stroke-width="1.3">
+              <ellipse cx="107" cy="117" rx="13" ry="5" transform="rotate(28 107 117)"/>
+              <ellipse cx="107" cy="117" rx="13" ry="5" transform="rotate(-32 107 117)"/>
+            </g>
+            <circle cx="107" cy="117" r="2.6" fill="#c9a35c"/>
+          </svg>
+          <div class="crest-caption">✦ MUTOR, NEC MUTOR ✦</div>
         </div>
 
         <div class="footer-credit">© <span class="footer-year"></span> Nitin Ranjan · Forged in Quirk</div>
@@ -1581,26 +1741,33 @@
 
   loadStations();
 
-  // ---------- ambience toggle (personal.app) ----------
+  // ---------- ambience toggle: desktop titlebar button + mobile home-row button ----------
   const ambienceToggle = document.getElementById('ambienceToggle');
   const ambienceLabel = document.getElementById('ambienceLabel');
-  let ambienceOn = false;
+  const ambienceToggleMobile = document.getElementById('ambienceToggleMobile');
+  const ambienceMobileLabel = document.getElementById('ambienceMobileLabel');
 
-  ambienceToggle.addEventListener('click', () => {
-    if(!ambienceOn){
-      ambientMusic.start();
-      ambienceOn = true;
-      ambienceToggle.classList.add('on');
-      ambienceToggle.setAttribute('aria-pressed', 'true');
-      ambienceLabel.textContent = 'ambience';
-    }else{
+  function syncAmbienceUI(){
+    const on = ambientMusic.isPlaying();
+    ambienceToggle.classList.toggle('on', on);
+    ambienceToggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+    ambienceLabel.textContent = 'ambience';
+    ambienceToggleMobile.classList.toggle('on', on);
+    ambienceToggleMobile.setAttribute('aria-pressed', on ? 'true' : 'false');
+    ambienceMobileLabel.textContent = on ? 'ambience — playing' : 'ambience';
+  }
+
+  function toggleAmbience(){
+    if(ambientMusic.isPlaying()){
       ambientMusic.stop();
-      ambienceOn = false;
-      ambienceToggle.classList.remove('on');
-      ambienceToggle.setAttribute('aria-pressed', 'false');
-      ambienceLabel.textContent = 'ambience';
+    }else{
+      ambientMusic.start();
     }
-  });
+    syncAmbienceUI();
+  }
+
+  ambienceToggle.addEventListener('click', toggleAmbience);
+  ambienceToggleMobile.addEventListener('click', toggleAmbience);
 
   document.querySelectorAll('.footer-year').forEach(el => {
     el.textContent = new Date().getFullYear();
